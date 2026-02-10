@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "submit": "Enviar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "close": "Cerrar",
+    "search": "Buscar",
+    "noResults": "No se encontraron resultados",
+    "required": "Obligatorio",
+    "optional": "Opcional"
+  },
+  "nav": {
+    "home": "Inicio",
+    "dashboard": "Panel",
+    "log": "Registrar Actividad",
+    "compare": "Comparar",
+    "settings": "Ajustes",
+    "signIn": "Iniciar Sesión",
+    "signOut": "Cerrar Sesión"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "continueAsGuest": "Continuar como invitado",
+    "guestNote": "Tus datos se guardarán localmente. Crea una cuenta para sincronizar entre dispositivos."
+  },
+  "dashboard": {
+    "title": "Tu Huella de Carbono",
+    "total": "Total: {{value}} kg CO2e",
+    "period": {
+      "day": "Hoy",
+      "week": "Esta Semana",
+      "month": "Este Mes",
+      "year": "Este Año",
+      "all": "Todo el Tiempo"
+    },
+    "breakdown": "Desglose por Categoría",
+    "trend": "Tendencia en el Tiempo",
+    "noData": "Aún no hay actividades registradas",
+    "startTracking": "Comienza a registrar tu huella",
+    "recent": "Actividades Recientes"
+  },
+  "activity": {
+    "log": "Registrar Actividad",
+    "category": "Categoría",
+    "type": "Tipo",
+    "value": "Valor",
+    "date": "Fecha",
+    "notes": "Notas",
+    "notesPlaceholder": "Notas opcionales...",
+    "logged": "¡Actividad registrada!",
+    "deleted": "Actividad eliminada",
+    "categories": {
+      "transport": "Transporte",
+      "energy": "Energía del Hogar",
+      "food": "Alimentación"
+    },
+    "transport": {
+      "title": "Transporte",
+      "distance": "Distancia (km)",
+      "types": {
+        "car_petrol": "Coche (Gasolina)",
+        "car_diesel": "Coche (Diésel)",
+        "car_electric": "Coche (Eléctrico)",
+        "bus": "Autobús",
+        "train": "Tren",
+        "plane_domestic": "Avión (Nacional)",
+        "plane_international": "Avión (Internacional)",
+        "bike": "Bicicleta",
+        "walk": "Caminar"
+      }
+    },
+    "energy": {
+      "title": "Energía del Hogar",
+      "amount": "Cantidad (kWh)",
+      "types": {
+        "electricity": "Electricidad",
+        "natural_gas": "Gas Natural",
+        "heating_oil": "Gasóleo"
+      }
+    },
+    "food": {
+      "title": "Alimentación",
+      "servings": "Raciones",
+      "types": {
+        "beef": "Ternera",
+        "pork": "Cerdo",
+        "poultry": "Pollo",
+        "fish": "Pescado",
+        "dairy": "Lácteos",
+        "vegetables": "Verduras",
+        "vegan_meal": "Comida Vegana"
+      }
+    }
+  },
+  "comparison": {
+    "title": "Comparación Regional",
+    "yourFootprint": "Tu Huella",
+    "regionalAverage": "Media Regional",
+    "percentile": "Estás en el percentil {{percentile}}",
+    "betterThan": "{{percent}}% mejor que la media",
+    "worseThan": "{{percent}}% mayor que la media",
+    "selectRegion": "Selecciona tu región",
+    "detecting": "Detectando tu ubicación...",
+    "changeRegion": "Cambiar región"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "language": "Idioma",
+    "region": "Región Predeterminada",
+    "units": "Unidades",
+    "theme": "Tema",
+    "themes": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "account": "Cuenta",
+    "deleteAccount": "Eliminar Cuenta",
+    "deleteWarning": "Esta acción no se puede deshacer. Todos tus datos serán eliminados permanentemente.",
+    "exportData": "Exportar Datos"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
+    "network": "Error de red. Por favor, comprueba tu conexión.",
+    "unauthorized": "Por favor, inicia sesión para continuar.",
+    "notFound": "Recurso no encontrado.",
+    "validation": "Por favor, comprueba los datos introducidos."
+  }
+}

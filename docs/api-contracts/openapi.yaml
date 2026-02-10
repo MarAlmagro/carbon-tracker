@@ -1,0 +1,528 @@
+openapi: 3.1.0
+info:
+  title: Carbon Footprint Tracker API
+  description: |
+    API for tracking personal carbon footprint.
+    Supports anonymous sessions and optional user accounts.
+  version: 1.0.0
+  contact:
+    name: Developer
+    url: https://github.com/yourusername/carbon-tracker
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local development
+  - url: https://carbon-tracker-api.onrender.com/api/v1
+    description: Production
+
+tags:
+  - name: activities
+    description: Activity logging and retrieval
+  - name: footprint
+    description: Footprint calculations and summaries
+  - name: comparison
+    description: Regional comparisons
+  - name: health
+    description: System health checks
+
+paths:
+  /health:
+    get:
+      tags: [health]
+      summary: Health check
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /activities:
+    get:
+      tags: [activities]
+      summary: List activities
+      operationId: listActivities
+      security:
+        - bearerAuth: []
+        - sessionId: []
+      parameters:
+        - $ref: '#/components/parameters/periodParam'
+        - $ref: '#/components/parameters/categoryParam'
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/offsetParam'
+      responses:
+        '200':
+          description: Activities retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags: [activities]
+      summary: Log new activity
+      operationId: createActivity
+      security:
+        - bearerAuth: []
+        - sessionId: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityInput'
+      responses:
+        '201':
+          description: Activity created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /activities/{activityId}:
+    get:
+      tags: [activities]
+      summary: Get activity by ID
+      operationId: getActivity
+      security:
+        - bearerAuth: []
+        - sessionId: []
+      parameters:
+        - $ref: '#/components/parameters/activityIdParam'
+      responses:
+        '200':
+          description: Activity found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Activity'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags: [activities]
+      summary: Delete activity
+      operationId: deleteActivity
+      security:
+        - bearerAuth: []
+        - sessionId: []
+      parameters:
+        - $ref: '#/components/parameters/activityIdParam'
+      responses:
+        '204':
+          description: Activity deleted
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /footprint/summary:
+    get:
+      tags: [footprint]
+      summary: Get footprint summary
+      operationId: getFootprintSummary
+      security:
+        - bearerAuth: []
+        - sessionId: []
+      parameters:
+        - $ref: '#/components/parameters/periodParam'
+      responses:
+        '200':
+          description: Footprint summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FootprintSummary'
+
+  /footprint/trend:
+    get:
+      tags: [footprint]
+      summary: Get footprint trend over time
+      operationId: getFootprintTrend
+      security:
+        - bearerAuth: []
+        - sessionId: []
+      parameters:
+        - $ref: '#/components/parameters/periodParam'
+        - name: granularity
+          in: query
+          schema:
+            type: string
+            enum: [day, week, month]
+            default: week
+      responses:
+        '200':
+          description: Footprint trend data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FootprintTrend'
+
+  /comparison/region:
+    get:
+      tags: [comparison]
+      summary: Compare footprint to regional average
+      operationId: compareToRegion
+      security:
+        - bearerAuth: []
+        - sessionId: []
+      parameters:
+        - $ref: '#/components/parameters/periodParam'
+        - name: region
+          in: query
+          description: ISO country code (e.g., ES, US, GB)
+          schema:
+            type: string
+            pattern: '^[A-Z]{2}$'
+      responses:
+        '200':
+          description: Regional comparison
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionalComparison'
+
+  /emission-factors:
+    get:
+      tags: [activities]
+      summary: List available emission factors
+      operationId: listEmissionFactors
+      parameters:
+        - name: category
+          in: query
+          schema:
+            $ref: '#/components/schemas/ActivityCategory'
+      responses:
+        '200':
+          description: Emission factors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmissionFactor'
+
+  /location/detect:
+    get:
+      tags: [comparison]
+      summary: Detect user location from IP
+      operationId: detectLocation
+      responses:
+        '200':
+          description: Detected location
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationInfo'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token for authenticated users
+    sessionId:
+      type: apiKey
+      in: header
+      name: X-Session-ID
+      description: Anonymous session identifier (UUID)
+
+  parameters:
+    activityIdParam:
+      name: activityId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+    periodParam:
+      name: period
+      in: query
+      schema:
+        type: string
+        enum: [day, week, month, year, all]
+        default: month
+
+    categoryParam:
+      name: category
+      in: query
+      schema:
+        $ref: '#/components/schemas/ActivityCategory'
+
+    limitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+    offsetParam:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+
+  schemas:
+    ActivityCategory:
+      type: string
+      enum: [transport, energy, food]
+      description: Main activity category
+
+    TransportType:
+      type: string
+      enum: [car_petrol, car_diesel, car_electric, bus, train, plane_domestic, plane_international, bike, walk]
+
+    EnergyType:
+      type: string
+      enum: [electricity, natural_gas, heating_oil]
+
+    FoodType:
+      type: string
+      enum: [beef, pork, poultry, fish, dairy, vegetables, vegan_meal]
+
+    ActivityInput:
+      type: object
+      required: [category, type, value]
+      properties:
+        category:
+          $ref: '#/components/schemas/ActivityCategory'
+        type:
+          type: string
+          description: Subtype within category (e.g., car_petrol, electricity)
+        value:
+          type: number
+          minimum: 0
+          description: Quantity (km for transport, kWh for energy, servings for food)
+        date:
+          type: string
+          format: date
+          description: Activity date (defaults to today)
+        notes:
+          type: string
+          maxLength: 500
+      example:
+        category: transport
+        type: car_petrol
+        value: 25.5
+        date: '2024-01-15'
+
+    Activity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        category:
+          $ref: '#/components/schemas/ActivityCategory'
+        type:
+          type: string
+        value:
+          type: number
+        co2e_kg:
+          type: number
+          description: Calculated CO2 equivalent in kilograms
+        date:
+          type: string
+          format: date
+        notes:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      example:
+        id: '550e8400-e29b-41d4-a716-446655440000'
+        category: transport
+        type: car_petrol
+        value: 25.5
+        co2e_kg: 5.87
+        date: '2024-01-15'
+        created_at: '2024-01-15T10:30:00Z'
+
+    ActivityListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Activity'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    FootprintSummary:
+      type: object
+      properties:
+        total_co2e_kg:
+          type: number
+        period:
+          type: string
+        breakdown:
+          type: object
+          properties:
+            transport:
+              type: number
+            energy:
+              type: number
+            food:
+              type: number
+        activity_count:
+          type: integer
+        daily_average:
+          type: number
+      example:
+        total_co2e_kg: 245.8
+        period: month
+        breakdown:
+          transport: 120.5
+          energy: 85.3
+          food: 40.0
+        activity_count: 47
+        daily_average: 7.93
+
+    FootprintTrend:
+      type: object
+      properties:
+        period:
+          type: string
+        granularity:
+          type: string
+        data_points:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              co2e_kg:
+                type: number
+              breakdown:
+                type: object
+
+    RegionalComparison:
+      type: object
+      properties:
+        user_footprint_kg:
+          type: number
+        regional_average_kg:
+          type: number
+        region:
+          type: string
+        region_name:
+          type: string
+        percentile:
+          type: integer
+          description: User's percentile (lower is better)
+        difference_percent:
+          type: number
+      example:
+        user_footprint_kg: 245.8
+        regional_average_kg: 320.0
+        region: ES
+        region_name: Spain
+        percentile: 35
+        difference_percent: -23.2
+
+    EmissionFactor:
+      type: object
+      properties:
+        category:
+          $ref: '#/components/schemas/ActivityCategory'
+        type:
+          type: string
+        factor:
+          type: number
+          description: kg CO2e per unit
+        unit:
+          type: string
+          description: Unit of measurement (km, kWh, serving)
+        source:
+          type: string
+        last_updated:
+          type: string
+          format: date
+
+    LocationInfo:
+      type: object
+      properties:
+        country_code:
+          type: string
+        country_name:
+          type: string
+        detected:
+          type: boolean
+          description: Whether location was auto-detected
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        version:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable message
+        details:
+          type: object
+          description: Additional error details
+
+  responses:
+    BadRequest:
+      description: Invalid request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: validation_error
+            message: Invalid input
+            details:
+              field: value
+              issue: must be positive
+
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: unauthorized
+            message: Valid session or authentication required
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: not_found
+            message: Activity not found

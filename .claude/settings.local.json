@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m venv:*)",
+      "Bash(.\\\\venv\\\\Scripts\\\\python.exe -m pip install:*)",
+      "Bash(\"./venv/Scripts/python.exe\" -m pip install --upgrade pip)",
+      "Bash(\"./venv/Scripts/python.exe\" -m pip install -r requirements.txt -r requirements-dev.txt)",
+      "Bash(\"./venv/Scripts/python.exe\" -c \"from api.main import app; print\\(''✓ Backend app imports successfully''\\)\")",
+      "Bash(\"../venv/Scripts/python.exe\" -c \"from api.main import app; print\\(''✓ Backend app imports successfully''\\)\")",
+      "Bash(\"../venv/Scripts/python.exe\" -c \"from api.main import app; print\\(''Backend app imports successfully''\\)\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(\"./venv/Scripts/python.exe\" -m pytest tests/ -v --tb=short)",
+      "Bash(\"./venv/Scripts/python.exe\" -m pytest tests/unit/domain/services/test_calculation_service.py -v)",
+      "Bash(\"./venv/Scripts/python.exe\" -m pytest tests/ -v --tb=line)",
+      "Bash(\"./venv/Scripts/python.exe\" -m pytest tests/ -v)",
+      "Bash(python -m pytest:*)",
+      "Bash(..venvScriptsactivate)",
+      "Bash(pip install:*)",
+      "Bash(source .venv/Scripts/activate:*)"
+    ]
+  }
+}

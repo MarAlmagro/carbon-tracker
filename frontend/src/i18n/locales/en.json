@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "submit": "Submit",
+    "back": "Back",
+    "next": "Next",
+    "close": "Close",
+    "search": "Search",
+    "noResults": "No results found",
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "log": "Log Activity",
+    "compare": "Compare",
+    "settings": "Settings",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "continueAsGuest": "Continue as guest",
+    "guestNote": "Your data will be saved locally. Create an account to sync across devices."
+  },
+  "dashboard": {
+    "title": "Your Carbon Footprint",
+    "total": "Total: {{value}} kg CO2e",
+    "period": {
+      "day": "Today",
+      "week": "This Week",
+      "month": "This Month",
+      "year": "This Year",
+      "all": "All Time"
+    },
+    "breakdown": "Breakdown by Category",
+    "trend": "Trend Over Time",
+    "noData": "No activities logged yet",
+    "startTracking": "Start tracking your footprint",
+    "recent": "Recent Activities"
+  },
+  "activity": {
+    "log": "Log Activity",
+    "category": "Category",
+    "type": "Type",
+    "value": "Value",
+    "date": "Date",
+    "notes": "Notes",
+    "notesPlaceholder": "Optional notes...",
+    "logged": "Activity logged!",
+    "deleted": "Activity deleted",
+    "categories": {
+      "transport": "Transport",
+      "energy": "Home Energy",
+      "food": "Food & Diet"
+    },
+    "transport": {
+      "title": "Transport",
+      "distance": "Distance (km)",
+      "types": {
+        "car_petrol": "Car (Petrol)",
+        "car_diesel": "Car (Diesel)",
+        "car_electric": "Car (Electric)",
+        "bus": "Bus",
+        "train": "Train",
+        "plane_domestic": "Plane (Domestic)",
+        "plane_international": "Plane (International)",
+        "bike": "Bicycle",
+        "walk": "Walking"
+      }
+    },
+    "energy": {
+      "title": "Home Energy",
+      "amount": "Amount (kWh)",
+      "types": {
+        "electricity": "Electricity",
+        "natural_gas": "Natural Gas",
+        "heating_oil": "Heating Oil"
+      }
+    },
+    "food": {
+      "title": "Food & Diet",
+      "servings": "Servings",
+      "types": {
+        "beef": "Beef",
+        "pork": "Pork",
+        "poultry": "Poultry",
+        "fish": "Fish",
+        "dairy": "Dairy",
+        "vegetables": "Vegetables",
+        "vegan_meal": "Vegan Meal"
+      }
+    }
+  },
+  "comparison": {
+    "title": "Regional Comparison",
+    "yourFootprint": "Your Footprint",
+    "regionalAverage": "Regional Average",
+    "percentile": "You're in the {{percentile}}th percentile",
+    "betterThan": "{{percent}}% better than average",
+    "worseThan": "{{percent}}% higher than average",
+    "selectRegion": "Select your region",
+    "detecting": "Detecting your location...",
+    "changeRegion": "Change region"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "region": "Default Region",
+    "units": "Units",
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "account": "Account",
+    "deleteAccount": "Delete Account",
+    "deleteWarning": "This action cannot be undone. All your data will be permanently deleted.",
+    "exportData": "Export Data"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "Please sign in to continue.",
+    "notFound": "Resource not found.",
+    "validation": "Please check your input."
+  }
+}

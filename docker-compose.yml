@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: carbon-tracker-api
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_PUBLISHABLE_KEY=${SUPABASE_PUBLISHABLE_KEY}
+      - ENVIRONMENT=development
+      - LOG_LEVEL=DEBUG
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/src:/app/src:ro
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # React Frontend (development)
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: carbon-tracker-web
+    environment:
+      - VITE_API_URL=http://localhost:8000/api/v1
+      - VITE_SUPABASE_URL=${SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${SUPABASE_PUBLISHABLE_KEY}
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/src:/app/src:ro
+      - ./frontend/public:/app/public:ro
+    depends_on:
+      - api
+    command: npm run dev -- --host
+
+  # MCP Server (optional, for testing)
+  mcp:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.mcp
+    container_name: carbon-tracker-mcp
+    environment:
+      - API_BASE_URL=http://api:8000/api/v1
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api
+    profiles:
+      - mcp  # Only start with: docker compose --profile mcp up
+
+networks:
+  default:
+    name: carbon-tracker-network
