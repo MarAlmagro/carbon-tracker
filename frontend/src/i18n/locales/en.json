@@ -58,7 +58,9 @@
     "trend": "Trend Over Time",
     "noData": "No activities logged yet",
     "startTracking": "Start tracking your footprint",
-    "recent": "Recent Activities"
+    "recent": "Recent Activities",
+    "activities": "Activities",
+    "avgDaily": "Average Daily"
   },
   "activity": {
     "log": "Log Activity",

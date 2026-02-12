@@ -58,7 +58,9 @@
     "trend": "Tendencia en el Tiempo",
     "noData": "Aún no hay actividades registradas",
     "startTracking": "Comienza a registrar tu huella",
-    "recent": "Actividades Recientes"
+    "recent": "Actividades Recientes",
+    "activities": "Actividades",
+    "avgDaily": "Promedio Diario"
   },
   "activity": {
     "log": "Registrar Actividad",
