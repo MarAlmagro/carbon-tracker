@@ -121,6 +121,48 @@ npm run lint
 npm run typecheck
 ```
 
+## Dashboard
+
+The dashboard provides visual insights into your carbon footprint with interactive charts and period-based filtering.
+
+### Features
+
+- **Summary Card** — Total CO2e, activity count, % change vs previous period, daily average
+- **Category Breakdown** — Pie chart showing emissions split by category (transport, energy, food)
+- **Trend Chart** — Line chart showing daily emissions over the selected period
+- **Period Selector** — Switch between Today, This Week, This Month, This Year, All Time
+
+### API Endpoints
+
+| Endpoint | Description |
+|---|---|
+| `GET /api/v1/footprint/summary?period=month` | Summary with totals and period comparison |
+| `GET /api/v1/footprint/breakdown?period=month` | Category breakdown with percentages |
+| `GET /api/v1/footprint/trend?period=month` | Daily time-series data points |
+
+All endpoints accept `period` (`day`, `week`, `month`, `year`, `all`) and optional `start_date`/`end_date` query parameters. Authentication is via `Authorization: Bearer <token>` header (authenticated users) or `X-Session-ID` header (guests).
+
+### Aggregation Logic
+
+The backend aggregation service (`backend/src/domain/services/aggregation_service.py`) performs all calculations as pure business logic with no external dependencies:
+
+- **Total CO2e** — Sums `co2e_kg` across all activities in the date range
+- **Category Breakdown** — Groups activities by `category` field, sums CO2e per group, calculates percentage of total
+- **Daily Trend** — Buckets activities by date, fills missing dates in the range with zero values to produce a continuous time series
+- **Period Dates** — Converts period strings to `(start_date, end_date)` tuples:
+  - `day` → today only
+  - `week` → Monday to Sunday of current week
+  - `month` → 1st to last day of current month
+  - `year` → Jan 1 to Dec 31 of current year
+  - `all` → 2020-01-01 to 2030-12-31
+- **Period Comparison** — Fetches the equivalent previous period (same duration, immediately prior) and calculates `((current - previous) / previous) * 100` percentage change
+
+### Frontend Architecture
+
+- **Components** (`frontend/src/components/features/footprint/`) — `PeriodSelector`, `SummaryCard`, `CategoryBreakdownChart`, `TrendChart`, all wrapped with `React.memo`
+- **Hooks** (`frontend/src/hooks/useFootprint.ts`) — React Query hooks with 2-minute stale time and 10-minute garbage collection
+- **Auto-refresh** — Footprint queries are automatically invalidated when a new activity is logged via `useCreateActivity`
+
 ## API Documentation
 
 - OpenAPI spec: `/docs/api-contracts/openapi.yaml`
