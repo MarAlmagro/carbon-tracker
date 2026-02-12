@@ -25,9 +25,7 @@ services:
       dockerfile: Dockerfile.dev
     container_name: carbon-tracker-web
     environment:
-      - VITE_API_URL=http://localhost:8000/api/v1
-      - VITE_SUPABASE_URL=${SUPABASE_URL}
-      - VITE_SUPABASE_ANON_KEY=${SUPABASE_PUBLISHABLE_KEY}
+      - VITE_API_URL=http://localhost:8000
     ports:
       - "5173:5173"
     volumes:

@@ -116,9 +116,7 @@ npm install
 cp .env.example .env
 
 # Edit .env
-VITE_API_BASE_URL=http://localhost:8000/api/v1
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+VITE_API_URL=http://localhost:8000
 ```
 
 ### 4. Run Frontend
@@ -308,9 +306,7 @@ sudo systemctl start postgresql
 ### Frontend (.env)
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
-| VITE_API_BASE_URL | Yes | Backend API URL | `http://localhost:8000/api/v1` |
-| VITE_SUPABASE_URL | Yes | Supabase project URL | `https://xxx.supabase.co` |
-| VITE_SUPABASE_ANON_KEY | Yes | Supabase anonymous key | `eyJhbGc...` |
+| VITE_API_URL | Yes | Backend API URL | `http://localhost:8000` |
 
 ## Development Workflow
 
