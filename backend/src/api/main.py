@@ -40,7 +40,7 @@ def create_app() -> FastAPI:
 
     # Root endpoint
     @app.get("/")
-    async def root():
+    async def root() -> RedirectResponse:
         return RedirectResponse(url="/docs")
 
     # Mount routers

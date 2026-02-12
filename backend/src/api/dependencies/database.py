@@ -18,4 +18,4 @@ def get_supabase() -> Client:
         async def handler(client: Client = Depends(get_supabase)):
             result = client.table("items").select("*").execute()
     """
-    return get_supabase_client()
+    return get_supabase_client()  # type: ignore[no-any-return]

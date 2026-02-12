@@ -1,6 +1,7 @@
 """Supabase implementation of ActivityRepository port."""
 
 from datetime import datetime
+from typing import Any
 from uuid import UUID
 
 from supabase import Client
@@ -129,7 +130,7 @@ class SupabaseActivityRepository(ActivityRepository):
         )
         return len(result.data) > 0
 
-    def _row_to_entity(self, row: dict) -> Activity:
+    def _row_to_entity(self, row: Any) -> Activity:
         """Convert Supabase row to domain entity.
 
         Args:
