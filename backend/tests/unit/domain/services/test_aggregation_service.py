@@ -25,6 +25,7 @@ def _make_activity(
         co2e_kg=co2e_kg,
         date=activity_date,
         notes=None,
+        metadata=None,
         user_id=None,
         session_id="test-session",
         created_at=datetime.now(timezone.utc),

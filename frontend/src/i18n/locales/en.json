@@ -115,7 +115,13 @@
     },
     "energy": {
       "title": "Home Energy",
-      "amount": "Amount (kWh)",
+      "type": "Energy Type",
+      "amount": "Amount",
+      "logEnergy": "Log Energy",
+      "units": {
+        "kwh": "kWh",
+        "liters": "liters"
+      },
       "types": {
         "electricity": "Electricity",
         "natural_gas": "Natural Gas",
@@ -124,7 +130,10 @@
     },
     "food": {
       "title": "Food & Diet",
-      "servings": "Servings",
+      "type": "Food Type",
+      "serving": "serving",
+      "servings": "servings",
+      "logFood": "Log Food",
       "types": {
         "beef": "Beef",
         "pork": "Pork",
@@ -134,7 +143,8 @@
         "vegetables": "Vegetables",
         "vegan_meal": "Vegan Meal"
       }
-    }
+    },
+    "estimatedCo2e": "Estimated CO2e"
   },
   "comparison": {
     "title": "Regional Comparison",

@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field
 class ActivityInput(BaseModel):
     """Input schema for creating an activity."""
 
-    category: str = Field(..., max_length=50)
+    category: str = Field(..., pattern="^(transport|energy|food)$", max_length=50)
     type: str = Field(..., max_length=100)
     value: float = Field(..., gt=0, le=100000)
     date: date
