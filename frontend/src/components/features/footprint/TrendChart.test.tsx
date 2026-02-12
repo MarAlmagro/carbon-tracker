@@ -53,7 +53,7 @@ const mockTrend: FootprintTrend = {
   data_points: [
     { date: '2026-02-01', co2e_kg: 5.23, activity_count: 2 },
     { date: '2026-02-02', co2e_kg: 8.45, activity_count: 3 },
-    { date: '2026-02-03', co2e_kg: 0.0, activity_count: 0 },
+    { date: '2026-02-03', co2e_kg: 0, activity_count: 0 },
   ],
   total_co2e_kg: 13.68,
   average_co2e_kg: 4.56,
