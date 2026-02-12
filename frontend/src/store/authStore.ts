@@ -2,6 +2,7 @@ import { type Session, type User } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase } from '@/lib/supabase';
+import { apiClient } from '@/services/api';
 
 interface AuthState {
   user: User | null;
@@ -47,11 +48,22 @@ export const useAuthStore = create<AuthState>()(
         });
         if (error) throw error;
 
+        const previousSessionId = _get().sessionId;
+
         set({
           user: data.user,
           session: data.session,
           isAuthenticated: !!data.user,
         });
+
+        // Migrate anonymous activities to authenticated user
+        if (previousSessionId) {
+          try {
+            await apiClient.migrateActivities(previousSessionId);
+          } catch {
+            // Migration is best-effort; don't block sign-in
+          }
+        }
       },
 
       signOut: async () => {
