@@ -11,10 +11,12 @@ class ActivityInput(BaseModel):
 
     category: str = Field(..., max_length=50)
     type: str = Field(..., max_length=100)
-    value: float = Field(..., gt=0, le=10000)
+    value: float = Field(..., gt=0, le=100000)
     date: date
     notes: str | None = Field(None, max_length=500)
-    metadata: dict | None = Field(None, description="Optional metadata (e.g., flight origin/destination)")
+    metadata: dict | None = Field(
+        None, description="Optional metadata (e.g., flight origin/destination)"
+    )
 
 
 class ActivityResponse(BaseModel):
