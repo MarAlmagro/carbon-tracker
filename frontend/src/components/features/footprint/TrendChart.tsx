@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   LineChart,
@@ -14,7 +15,7 @@ interface TrendChartProps {
   readonly data: FootprintTrend;
 }
 
-export function TrendChart({ data }: TrendChartProps) {
+export const TrendChart = memo(function TrendChart({ data }: TrendChartProps) {
   const { t } = useTranslation();
 
   const chartData = data.data_points.map((point) => ({
@@ -64,4 +65,4 @@ export function TrendChart({ data }: TrendChartProps) {
       </ResponsiveContainer>
     </div>
   );
-}
+});

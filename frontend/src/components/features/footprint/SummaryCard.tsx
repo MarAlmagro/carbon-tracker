@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FootprintSummary } from '@/services/api';
 
@@ -5,7 +6,7 @@ interface SummaryCardProps {
   readonly data: FootprintSummary;
 }
 
-export function SummaryCard({ data }: SummaryCardProps) {
+export const SummaryCard = memo(function SummaryCard({ data }: SummaryCardProps) {
   const { t } = useTranslation();
 
   const isIncrease = data.change_percentage > 0;
@@ -56,4 +57,4 @@ export function SummaryCard({ data }: SummaryCardProps) {
       </div>
     </div>
   );
-}
+});

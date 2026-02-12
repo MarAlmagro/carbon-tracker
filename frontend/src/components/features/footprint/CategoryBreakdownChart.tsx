@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   PieChart,
@@ -19,7 +20,7 @@ const COLORS: Record<string, string> = {
   food: '#10B981',
 };
 
-export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
+export const CategoryBreakdownChart = memo(function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
   const { t } = useTranslation();
 
   const chartData = data.breakdown.map((item) => ({
@@ -66,4 +67,4 @@ export function CategoryBreakdownChart({ data }: CategoryBreakdownChartProps) {
       </ResponsiveContainer>
     </div>
   );
-}
+});
