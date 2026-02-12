@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from api.middleware.error_handler import add_exception_handlers
 from api.routes import activities, emission_factors, health
@@ -36,6 +37,11 @@ def create_app() -> FastAPI:
 
     # Exception handlers
     add_exception_handlers(app)
+
+    # Root endpoint
+    @app.get("/")
+    async def root():
+        return RedirectResponse(url="/docs")
 
     # Mount routers
     app.include_router(health.router, prefix="/api/v1", tags=["health"])
