@@ -16,4 +16,6 @@ async def get_health() -> HealthResponse:
     Returns:
         HealthResponse: Status and message
     """
-    return HealthResponse(status="ok", message="Carbon Footprint Tracker API is running")
+    return HealthResponse(
+        status="ok", message="Carbon Footprint Tracker API is running"
+    )

@@ -60,16 +60,15 @@ cp .env.example .env
 # Edit .env with your values
 # Required:
 # - SUPABASE_URL: Your Supabase project URL
-# - SUPABASE_ANON_KEY: Supabase anonymous key
-# - SUPABASE_JWT_SECRET: JWT signing secret from Supabase
+# - SUPABASE_PUBLISHABLE_KEY: Supabase publishable key
 ```
 
 ### 5. Database Setup
 
 #### Option A: Supabase (Recommended)
 1. Create project at [supabase.com](https://supabase.com)
-2. Get project URL and anon key from project settings
-3. Update `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `.env`
+2. Get project URL and publishable key from project settings
+3. Update `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` in `.env`
 4. Apply schema via Supabase dashboard SQL editor or Supabase CLI
 
 #### Option B: Local PostgreSQL (for offline development)
@@ -81,7 +80,7 @@ createdb carbon_tracker
 ### 6. Seed Data (Optional)
 ```bash
 # Run seed script to populate emission factors
-python -m src.infrastructure.scripts.seed_emission_factors
+python -m backend.scripts.seed_emission_factors
 ```
 
 ### 7. Run Backend
@@ -117,9 +116,7 @@ npm install
 cp .env.example .env
 
 # Edit .env
-VITE_API_BASE_URL=http://localhost:8000/api/v1
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_API_URL=http://localhost:8000
 ```
 
 ### 4. Run Frontend
@@ -219,7 +216,6 @@ docker-compose down
 Services:
 - Backend: `http://localhost:8000`
 - Frontend: `http://localhost:5173`
-- PostgreSQL: `localhost:5432`
 
 ## Troubleshooting
 
@@ -309,9 +305,7 @@ sudo systemctl start postgresql
 ### Frontend (.env)
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
-| VITE_API_BASE_URL | Yes | Backend API URL | `http://localhost:8000/api/v1` |
-| VITE_SUPABASE_URL | Yes | Supabase project URL | `https://xxx.supabase.co` |
-| VITE_SUPABASE_ANON_KEY | Yes | Supabase anonymous key | `eyJhbGc...` |
+| VITE_API_URL | Yes | Backend API URL | `http://localhost:8000` |
 
 ## Development Workflow
 

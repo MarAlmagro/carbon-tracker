@@ -1,6 +1,7 @@
 """Supabase implementation of EmissionFactorRepository port."""
 
 from datetime import datetime
+from typing import Any
 
 from supabase import Client
 
@@ -76,7 +77,7 @@ class SupabaseEmissionFactorRepository(EmissionFactorRepository):
         )
         return [self._row_to_entity(row) for row in result.data]
 
-    def _row_to_entity(self, row: dict) -> EmissionFactor:
+    def _row_to_entity(self, row: Any) -> EmissionFactor:
         """Convert Supabase row to domain entity.
 
         Args:

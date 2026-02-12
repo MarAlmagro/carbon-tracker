@@ -14,4 +14,8 @@ class HealthResponse(BaseModel):
         ..., description="Health status message", examples=["Service is running"]
     )
 
-    model_config = {"json_schema_extra": {"example": {"status": "ok", "message": "Service is running"}}}
+    model_config = {
+        "json_schema_extra": {
+            "example": {"status": "ok", "message": "Service is running"}
+        }
+    }

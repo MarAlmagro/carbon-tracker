@@ -7,7 +7,7 @@ from httpx import ASGITransport, AsyncClient
 
 from api.dependencies.database import get_supabase
 from api.main import app
-from tests.integration.api.conftest import _make_mock_supabase
+from conftest import _make_mock_supabase
 
 EMISSION_FACTORS = [
     {

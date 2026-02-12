@@ -35,4 +35,4 @@ class CalculationService:
             raise ValueError("Activity value cannot be negative")
 
         co2e = value * factor.factor
-        return round(co2e, 2)
+        return round(co2e, 2)  # type: ignore[no-any-return]

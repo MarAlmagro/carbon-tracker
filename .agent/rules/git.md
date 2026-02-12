@@ -210,11 +210,9 @@ Already configured in `.gitignore`:
 ```bash
 # .env.example (committed)
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_JWT_SECRET=your-jwt-secret
+SUPABASE_PUBLISHABLE_KEY: Your Supabase publishable key
 
 # .env (gitignored)
 SUPABASE_URL=https://real-project.supabase.co
-SUPABASE_ANON_KEY=real-anon-key
-SUPABASE_JWT_SECRET=real-jwt-secret
+SUPABASE_PUBLISHABLE_KEY: Real Supabase publishable key
 ```

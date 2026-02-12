@@ -36,7 +36,6 @@ carbon-tracker/
 │   ├── api-contracts/      # OpenAPI specs (source of truth)
 │   ├── adr/                # Architecture Decision Records
 │   └── diagrams/           # System diagrams
-├── scripts/                # Utility scripts
 └── .agent/                 # Agent tooling (you are here)
 │   ├── README.md            # Agent system overview
 │   ├── DEVELOPMENT_SETUP.md # Local development setup

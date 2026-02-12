@@ -152,9 +152,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_API_URL: https://placeholder.api.com/api/v1
-          VITE_SUPABASE_URL: https://placeholder.supabase.co
-          VITE_SUPABASE_ANON_KEY: placeholder-key
+          VITE_API_URL: https://placeholder.api.com
 
   # Security scans
   security-scan:

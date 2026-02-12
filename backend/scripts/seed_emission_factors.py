@@ -7,14 +7,15 @@ Sources:
 - EPA Emission Factors Hub
 
 Usage:
-    python scripts/seed_emission_factors.py
+    python -m backend.scripts.seed_emission_factors
 """
 
 import os
 
 # Source constants
-SOURCE_DEFRA_2023 = "DEFRA 2023"
+SOURCE_DEFRA = "DEFRA"
 SOURCE_OUR_WORLD_IN_DATA = "Our World in Data"
+SOURCE_ESTIMATED = "Estimated"
 
 # Emission factors in kg CO2e per unit
 # Source: DEFRA 2023 / EPA
@@ -23,58 +24,58 @@ EMISSION_FACTORS = [
     {
         "category": "transport",
         "type": "car_petrol",
-        "factor": 0.17088,
+        "factor": 0.17099,
         "unit": "km",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Average petrol car",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "transport",
         "type": "car_diesel",
-        "factor": 0.16853,
+        "factor": 0.15059,
         "unit": "km",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Average diesel car",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "transport",
         "type": "car_electric",
-        "factor": 0.04715,
+        "factor": 0.04745,
         "unit": "km",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Average BEV, UK grid",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "transport",
         "type": "bus",
-        "factor": 0.10312,
+        "factor": 0.08291,
         "unit": "km",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Local bus",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "transport",
         "type": "train",
-        "factor": 0.03549,
+        "factor": 0.03594,
         "unit": "km",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "National rail",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "transport",
         "type": "plane_domestic",
         "factor": 0.24587,
         "unit": "km",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Domestic flight, economy",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "transport",
         "type": "plane_international",
         "factor": 0.19085,
         "unit": "km",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Long-haul flight, economy",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "transport",
@@ -82,7 +83,7 @@ EMISSION_FACTORS = [
         "factor": 0.0,
         "unit": "km",
         "source": "N/A",
-        "notes": "Zero emissions",
+        "source_year": 2023,
     },
     {
         "category": "transport",
@@ -90,7 +91,7 @@ EMISSION_FACTORS = [
         "factor": 0.0,
         "unit": "km",
         "source": "N/A",
-        "notes": "Zero emissions",
+        "source_year": 2023,
     },
     # Energy (kg CO2e per kWh)
     {
@@ -98,24 +99,24 @@ EMISSION_FACTORS = [
         "type": "electricity",
         "factor": 0.20705,
         "unit": "kWh",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "UK grid average",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "energy",
         "type": "natural_gas",
         "factor": 0.18293,
         "unit": "kWh",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Natural gas combustion",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     {
         "category": "energy",
         "type": "heating_oil",
         "factor": 0.24680,
         "unit": "kWh",
-        "source": SOURCE_DEFRA_2023,
-        "notes": "Burning oil",
+        "source": SOURCE_DEFRA,
+        "source_year": 2023,
     },
     # Food (kg CO2e per serving/kg)
     {
@@ -124,7 +125,7 @@ EMISSION_FACTORS = [
         "factor": 27.0,
         "unit": "kg",
         "source": SOURCE_OUR_WORLD_IN_DATA,
-        "notes": "Per kg of beef",
+        "source_year": 2023,
     },
     {
         "category": "food",
@@ -132,7 +133,7 @@ EMISSION_FACTORS = [
         "factor": 12.1,
         "unit": "kg",
         "source": SOURCE_OUR_WORLD_IN_DATA,
-        "notes": "Per kg of pork",
+        "source_year": 2023,
     },
     {
         "category": "food",
@@ -140,7 +141,7 @@ EMISSION_FACTORS = [
         "factor": 6.9,
         "unit": "kg",
         "source": SOURCE_OUR_WORLD_IN_DATA,
-        "notes": "Per kg of poultry",
+        "source_year": 2023,
     },
     {
         "category": "food",
@@ -148,7 +149,7 @@ EMISSION_FACTORS = [
         "factor": 5.4,
         "unit": "kg",
         "source": SOURCE_OUR_WORLD_IN_DATA,
-        "notes": "Per kg of fish",
+        "source_year": 2023,
     },
     {
         "category": "food",
@@ -156,7 +157,7 @@ EMISSION_FACTORS = [
         "factor": 3.2,
         "unit": "kg",
         "source": SOURCE_OUR_WORLD_IN_DATA,
-        "notes": "Per kg of cheese/dairy",
+        "source_year": 2023,
     },
     {
         "category": "food",
@@ -164,15 +165,15 @@ EMISSION_FACTORS = [
         "factor": 2.0,
         "unit": "kg",
         "source": SOURCE_OUR_WORLD_IN_DATA,
-        "notes": "Average vegetables",
+        "source_year": 2023,
     },
     {
         "category": "food",
         "type": "vegan_meal",
         "factor": 0.5,
         "unit": "serving",
-        "source": "Estimated",
-        "notes": "Average plant-based meal",
+        "source": SOURCE_ESTIMATED,
+        "source_year": 2023,
     },
 ]
 
@@ -198,7 +199,7 @@ def seed_database():
     """Seed the database with emission factors and regional averages."""
     import sys
 
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend", "src"))
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
     try:
         from infrastructure.config.supabase import get_supabase_client
@@ -207,7 +208,13 @@ def seed_database():
         table = client.table("emission_factors")
 
         for factor_data in EMISSION_FACTORS:
-            existing = table.select("id").eq("type", factor_data["type"]).execute()
+            existing = (
+                table.select("id")
+                .eq("category", factor_data["category"])
+                .eq("type", factor_data["type"])
+                .eq("source_year", factor_data["source_year"])
+                .execute()
+            )
 
             if existing.data:
                 print(
