@@ -64,6 +64,8 @@
   },
   "activity": {
     "log": "Log Activity",
+    "logging": "Logging...",
+    "logActivity": "Log Activity",
     "category": "Category",
     "type": "Type",
     "value": "Value",
