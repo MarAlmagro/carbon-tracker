@@ -86,6 +86,21 @@ vi.mock('recharts', () => ({
 vi.mock('@/components/features/activity', () => ({
   TransportForm: () => <div data-testid="transport-form">TransportForm</div>,
   ActivityList: () => <div data-testid="activity-list">ActivityList</div>,
+  CategorySelector: ({ value, onChange }: { value: string; onChange: (v: string) => void }) => (
+    <div data-testid="category-selector">
+      <button onClick={() => onChange('transport')}>Transport</button>
+      <button onClick={() => onChange('energy')}>Energy</button>
+      <button onClick={() => onChange('food')}>Food</button>
+    </div>
+  ),
+}));
+
+vi.mock('@/components/features/activity/EnergyForm', () => ({
+  EnergyForm: () => <div data-testid="energy-form">EnergyForm</div>,
+}));
+
+vi.mock('@/components/features/activity/FoodForm', () => ({
+  FoodForm: () => <div data-testid="food-form">FoodForm</div>,
 }));
 
 import { DashboardPage } from './DashboardPage';

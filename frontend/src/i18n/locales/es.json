@@ -115,7 +115,13 @@
     },
     "energy": {
       "title": "Energía del Hogar",
-      "amount": "Cantidad (kWh)",
+      "type": "Tipo de Energía",
+      "amount": "Cantidad",
+      "logEnergy": "Registrar Energía",
+      "units": {
+        "kwh": "kWh",
+        "liters": "litros"
+      },
       "types": {
         "electricity": "Electricidad",
         "natural_gas": "Gas Natural",
@@ -124,7 +130,10 @@
     },
     "food": {
       "title": "Alimentación",
-      "servings": "Raciones",
+      "type": "Tipo de Comida",
+      "serving": "ración",
+      "servings": "raciones",
+      "logFood": "Registrar Comida",
       "types": {
         "beef": "Ternera",
         "pork": "Cerdo",
@@ -134,18 +143,36 @@
         "vegetables": "Verduras",
         "vegan_meal": "Comida Vegana"
       }
-    }
+    },
+    "estimatedCo2e": "CO2e estimado"
   },
   "comparison": {
     "title": "Comparación Regional",
     "yourFootprint": "Tu Huella",
     "regionalAverage": "Media Regional",
+    "region": "Región",
+    "period": "Período",
     "percentile": "Estás en el percentil {{percentile}}",
     "betterThan": "{{percent}}% mejor que la media",
     "worseThan": "{{percent}}% mayor que la media",
     "selectRegion": "Selecciona tu región",
     "detecting": "Detectando tu ubicación...",
-    "changeRegion": "Cambiar región"
+    "changeRegion": "Cambiar región",
+    "rating": {
+      "excellent": "Excelente",
+      "good": "Bueno",
+      "average": "Promedio",
+      "above_average": "Por Encima del Promedio",
+      "high": "Alto"
+    },
+    "noData": "Aún no hay datos para comparar",
+    "startTracking": "Empieza a registrar para comparar tu huella",
+    "insights": "Perspectivas y Recomendaciones",
+    "breakdown": "Desglose por Categoría",
+    "chart": "Gráfico de Comparación",
+    "you": "Tú",
+    "average": "Promedio",
+    "world": "Promedio Mundial"
   },
   "settings": {
     "title": "Ajustes",

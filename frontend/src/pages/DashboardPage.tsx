@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TransportForm, ActivityList } from '@/components/features/activity';
+import {
+  TransportForm,
+  ActivityList,
+  CategorySelector,
+} from '@/components/features/activity';
+import { EnergyForm } from '@/components/features/activity/EnergyForm';
+import { FoodForm } from '@/components/features/activity/FoodForm';
 import {
   PeriodSelector,
   SummaryCard,
@@ -16,6 +22,7 @@ import {
 export function DashboardPage() {
   const { t } = useTranslation();
   const [period, setPeriod] = useState('month');
+  const [selectedCategory, setSelectedCategory] = useState('transport');
 
   const { data: summary, isLoading: summaryLoading } =
     useFootprintSummary(period);
@@ -68,7 +75,13 @@ export function DashboardPage() {
           <h2 className="text-xl font-semibold mb-4">
             {t('activity.log', 'Log Activity')}
           </h2>
-          <TransportForm />
+          <CategorySelector
+            value={selectedCategory}
+            onChange={setSelectedCategory}
+          />
+          {selectedCategory === 'transport' && <TransportForm />}
+          {selectedCategory === 'energy' && <EnergyForm />}
+          {selectedCategory === 'food' && <FoodForm />}
         </div>
 
         <div className="bg-card border rounded-lg p-6">

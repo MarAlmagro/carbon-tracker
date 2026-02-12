@@ -8,8 +8,9 @@ interface ActivityCardProps {
 export function ActivityCard({ activity }: ActivityCardProps) {
   const { t, i18n } = useTranslation();
 
-  const getTransportIcon = (type: string) => {
+  const getActivityIcon = (category: string, type: string) => {
     const icons: Record<string, string> = {
+      // Transport
       car_petrol: '🚗',
       car_diesel: '🚗',
       car_electric: '⚡🚗',
@@ -25,6 +26,18 @@ export function ActivityCard({ activity }: ActivityCardProps) {
       flight_international_short: '✈️',
       flight_international_medium: '✈️',
       flight_international_long: '✈️',
+      // Energy
+      electricity: '⚡',
+      natural_gas: '🔥',
+      heating_oil: '🛢️',
+      // Food
+      beef: '🥩',
+      pork: '🥓',
+      poultry: '🍗',
+      fish: '🐟',
+      dairy: '🥛',
+      vegetables: '🥗',
+      vegan_meal: '🌱',
     };
     return icons[type] || '📊';
   };
@@ -48,17 +61,16 @@ export function ActivityCard({ activity }: ActivityCardProps) {
     return translated === key ? type.replaceAll('_', ' ') : translated;
   };
 
-  const getUnitLabel = (category: string) => {
-    switch (category) {
-      case 'transport':
-        return 'km';
-      case 'energy':
-        return 'kWh';
-      case 'food':
-        return t('activity.food.servings', 'servings');
-      default:
-        return '';
+  const getUnitLabel = (category: string, type: string) => {
+    if (category === 'transport') {
+      return 'km';
+    } else if (category === 'energy') {
+      return type === 'heating_oil' ? t('activity.energy.units.liters') : t('activity.energy.units.kwh');
+    } else if (category === 'food') {
+      const count = activity.value;
+      return count === 1 ? t('activity.food.serving') : t('activity.food.servings');
     }
+    return '';
   };
 
   const renderFlightInfo = () => {
@@ -104,7 +116,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <span className="text-2xl" aria-hidden="true">
-            {getTransportIcon(activity.type)}
+            {getActivityIcon(activity.category, activity.type)}
           </span>
           <div>
             <p className="font-medium">
@@ -112,7 +124,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
                 ? t('activity.flight.label')
                 : getTypeLabel(activity.category, activity.type)}{' '}
               -{' '}
-              {activity.value} {getUnitLabel(activity.category)}
+              {activity.value} {getUnitLabel(activity.category, activity.type)}
             </p>
             <p className="text-sm text-muted-foreground">
               <span className="font-medium text-primary">

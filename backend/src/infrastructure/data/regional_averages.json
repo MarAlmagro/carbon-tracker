@@ -1,0 +1,233 @@
+[
+  {
+    "code": "world",
+    "name": "Global Average",
+    "average_annual_co2e_kg": 4800,
+    "breakdown": {
+      "transport": 1440,
+      "energy": 2400,
+      "food": 960
+    },
+    "source": "Global Carbon Project 2023"
+  },
+  {
+    "code": "na",
+    "name": "North America",
+    "average_annual_co2e_kg": 16000,
+    "breakdown": {
+      "transport": 9600,
+      "energy": 4800,
+      "food": 1600
+    },
+    "source": "EPA 2023"
+  },
+  {
+    "code": "eu",
+    "name": "Europe",
+    "average_annual_co2e_kg": 7000,
+    "breakdown": {
+      "transport": 2800,
+      "energy": 3150,
+      "food": 1050
+    },
+    "source": "European Environment Agency 2023"
+  },
+  {
+    "code": "asia",
+    "name": "Asia",
+    "average_annual_co2e_kg": 3500,
+    "breakdown": {
+      "transport": 1050,
+      "energy": 1750,
+      "food": 700
+    },
+    "source": "UNEP 2023"
+  },
+  {
+    "code": "sa",
+    "name": "South America",
+    "average_annual_co2e_kg": 2500,
+    "breakdown": {
+      "transport": 750,
+      "energy": 1250,
+      "food": 500
+    },
+    "source": "IPCC 2023"
+  },
+  {
+    "code": "af",
+    "name": "Africa",
+    "average_annual_co2e_kg": 1000,
+    "breakdown": {
+      "transport": 300,
+      "energy": 500,
+      "food": 200
+    },
+    "source": "UNEP 2023"
+  },
+  {
+    "code": "oc",
+    "name": "Oceania",
+    "average_annual_co2e_kg": 12000,
+    "breakdown": {
+      "transport": 6000,
+      "energy": 4800,
+      "food": 1200
+    },
+    "source": "Australian Government 2023"
+  },
+  {
+    "code": "us",
+    "name": "United States",
+    "average_annual_co2e_kg": 17000,
+    "breakdown": {
+      "transport": 10200,
+      "energy": 5100,
+      "food": 1700
+    },
+    "source": "EPA 2023"
+  },
+  {
+    "code": "uk",
+    "name": "United Kingdom",
+    "average_annual_co2e_kg": 5500,
+    "breakdown": {
+      "transport": 2200,
+      "energy": 2475,
+      "food": 825
+    },
+    "source": "UK BEIS 2023"
+  },
+  {
+    "code": "cn",
+    "name": "China",
+    "average_annual_co2e_kg": 7500,
+    "breakdown": {
+      "transport": 2250,
+      "energy": 3750,
+      "food": 1500
+    },
+    "source": "China MEE 2023"
+  },
+  {
+    "code": "in",
+    "name": "India",
+    "average_annual_co2e_kg": 1900,
+    "breakdown": {
+      "transport": 570,
+      "energy": 950,
+      "food": 380
+    },
+    "source": "India MOEF 2023"
+  },
+  {
+    "code": "jp",
+    "name": "Japan",
+    "average_annual_co2e_kg": 8700,
+    "breakdown": {
+      "transport": 2610,
+      "energy": 4350,
+      "food": 1740
+    },
+    "source": "Japan MOE 2023"
+  },
+  {
+    "code": "de",
+    "name": "Germany",
+    "average_annual_co2e_kg": 8100,
+    "breakdown": {
+      "transport": 3240,
+      "energy": 3645,
+      "food": 1215
+    },
+    "source": "German Federal Environment Agency 2023"
+  },
+  {
+    "code": "fr",
+    "name": "France",
+    "average_annual_co2e_kg": 4800,
+    "breakdown": {
+      "transport": 1920,
+      "energy": 2160,
+      "food": 720
+    },
+    "source": "French Ministry of Ecology 2023"
+  },
+  {
+    "code": "es",
+    "name": "Spain",
+    "average_annual_co2e_kg": 5300,
+    "breakdown": {
+      "transport": 2120,
+      "energy": 2385,
+      "food": 795
+    },
+    "source": "Spanish Ministry for Ecological Transition 2023"
+  },
+  {
+    "code": "it",
+    "name": "Italy",
+    "average_annual_co2e_kg": 5700,
+    "breakdown": {
+      "transport": 2280,
+      "energy": 2565,
+      "food": 855
+    },
+    "source": "Italian Ministry of Environment 2023"
+  },
+  {
+    "code": "ca",
+    "name": "Canada",
+    "average_annual_co2e_kg": 15000,
+    "breakdown": {
+      "transport": 9000,
+      "energy": 4500,
+      "food": 1500
+    },
+    "source": "Environment Canada 2023"
+  },
+  {
+    "code": "au",
+    "name": "Australia",
+    "average_annual_co2e_kg": 16500,
+    "breakdown": {
+      "transport": 8250,
+      "energy": 6600,
+      "food": 1650
+    },
+    "source": "Australian Government 2023"
+  },
+  {
+    "code": "br",
+    "name": "Brazil",
+    "average_annual_co2e_kg": 2300,
+    "breakdown": {
+      "transport": 690,
+      "energy": 1150,
+      "food": 460
+    },
+    "source": "Brazilian Ministry of Environment 2023"
+  },
+  {
+    "code": "mx",
+    "name": "Mexico",
+    "average_annual_co2e_kg": 3800,
+    "breakdown": {
+      "transport": 1140,
+      "energy": 1900,
+      "food": 760
+    },
+    "source": "Mexican SEMARNAT 2023"
+  },
+  {
+    "code": "za",
+    "name": "South Africa",
+    "average_annual_co2e_kg": 7200,
+    "breakdown": {
+      "transport": 2160,
+      "energy": 3600,
+      "food": 1440
+    },
+    "source": "South African DEA 2023"
+  }
+]

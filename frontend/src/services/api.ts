@@ -109,6 +109,38 @@ export interface FlightCalculation {
   haul_type: string;
 }
 
+export interface Region {
+  code: string;
+  name: string;
+  average_annual_co2e_kg: number;
+}
+
+export interface ComparisonResult {
+  user_footprint: {
+    period: string;
+    total_co2e_kg: number;
+    start_date: string;
+    end_date: string;
+    activity_count: number;
+  };
+  regional_average: {
+    region_code: string;
+    region_name: string;
+    average_annual_co2e_kg: number;
+  };
+  comparison: {
+    difference_kg: number;
+    difference_percentage: number;
+    percentile: number;
+    rating: string;
+    insights: string[];
+  };
+  breakdown: {
+    user_by_category: Record<string, number>;
+    regional_avg_by_category: Record<string, number>;
+  };
+}
+
 export class ApiClient {
   private readonly baseUrl: string;
 
@@ -208,6 +240,17 @@ export class ApiClient {
       method: 'POST',
       body: JSON.stringify(request),
     });
+  }
+
+  async getRegions(): Promise<Region[]> {
+    const response = await this.request<{ regions: Region[] }>('/api/v1/comparison/regions');
+    return response.regions;
+  }
+
+  async compareToRegion(regionCode: string, period: string = 'year'): Promise<ComparisonResult> {
+    return this.request<ComparisonResult>(
+      `/api/v1/comparison/compare?region_code=${regionCode}&period=${period}`
+    );
   }
 }
 
