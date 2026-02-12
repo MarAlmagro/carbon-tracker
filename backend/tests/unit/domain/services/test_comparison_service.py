@@ -1,7 +1,5 @@
 """Tests for ComparisonService."""
 
-import pytest
-
 from domain.services.comparison_service import ComparisonService
 
 
@@ -77,6 +75,13 @@ class TestCalculatePercentile:
         percentile = ComparisonService.calculate_percentile(
             user_value=32000, regional_avg=16000
         )
+        assert percentile == 90
+
+    def test_extremely_high_emissions(self) -> None:
+        """Test percentile for extremely high emissions (over double average)."""
+        percentile = ComparisonService.calculate_percentile(
+            user_value=33000, regional_avg=16000
+        )
         assert percentile == 95
 
 
@@ -128,7 +133,7 @@ class TestGenerateInsights:
 
     def test_some_categories_above_average(self) -> None:
         """Test insights when some categories are above average."""
-        user_breakdown = {"transport": 12000, "energy": 2000, "food": 800}
+        user_breakdown = {"transport": 13000, "energy": 2000, "food": 800}
         regional_breakdown = {"transport": 9600, "energy": 4800, "food": 1600}
 
         insights = ComparisonService.generate_insights(
@@ -136,7 +141,10 @@ class TestGenerateInsights:
         )
 
         assert len(insights) >= 2
-        assert any("above average" in insight and "transport" in insight for insight in insights)
+        assert any(
+            "above average" in insight and "transport" in insight
+            for insight in insights
+        )
 
     def test_no_insights_for_similar_values(self) -> None:
         """Test no insights when values are close to average."""
