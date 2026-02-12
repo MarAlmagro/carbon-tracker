@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
 from api.middleware.error_handler import add_exception_handlers
-from api.routes import activities, emission_factors, health
+from api.routes import activities, emission_factors, footprint, health, users
 from infrastructure.config.settings import get_settings
 
 settings = get_settings()
@@ -52,6 +52,16 @@ def create_app() -> FastAPI:
         emission_factors.router,
         prefix="/api/v1/emission-factors",
         tags=["emission-factors"],
+    )
+    app.include_router(
+        users.router,
+        prefix="/api/v1/users",
+        tags=["users"],
+    )
+    app.include_router(
+        footprint.router,
+        prefix="/api/v1/footprint",
+        tags=["footprint"],
     )
 
     return app

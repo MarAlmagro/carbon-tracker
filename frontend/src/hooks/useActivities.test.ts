@@ -73,7 +73,7 @@ describe('useActivities', () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    expect(apiClient.listActivities).toHaveBeenCalledWith('test-session-123');
+    expect(apiClient.listActivities).toHaveBeenCalled();
     expect(result.current.data).toHaveLength(1);
     expect(result.current.data?.[0].type).toBe('car_petrol');
   });
@@ -98,7 +98,7 @@ describe('useCreateActivity', () => {
 
     await result.current.mutateAsync(input);
 
-    expect(apiClient.createActivity).toHaveBeenCalledWith(input, 'test-session-123');
+    expect(apiClient.createActivity).toHaveBeenCalledWith(input);
   });
 });
 

@@ -59,11 +59,25 @@ def _make_mock_supabase(tables: dict | None = None) -> MagicMock:
             class QueryBuilder:
                 def __init__(self):
                     self._filters = []
+                    self._gte_filters = []
+                    self._lte_filters = []
                     self._orders = []
                     self._range_start = None
                     self._range_end = None
 
                 def eq(self, col, val):
+                    self._filters.append((col, val))
+                    return self
+
+                def gte(self, col, val):
+                    self._gte_filters.append((col, val))
+                    return self
+
+                def lte(self, col, val):
+                    self._lte_filters.append((col, val))
+                    return self
+
+                def is_(self, col, val):
                     self._filters.append((col, val))
                     return self
 
@@ -80,6 +94,14 @@ def _make_mock_supabase(tables: dict | None = None) -> MagicMock:
                     filtered = list(rows)
                     for col, val in self._filters:
                         filtered = [r for r in filtered if str(r.get(col)) == str(val)]
+                    for col, val in self._gte_filters:
+                        filtered = [
+                            r for r in filtered if str(r.get(col, "")) >= str(val)
+                        ]
+                    for col, val in self._lte_filters:
+                        filtered = [
+                            r for r in filtered if str(r.get(col, "")) <= str(val)
+                        ]
                     for col, desc in reversed(self._orders):
                         filtered.sort(
                             key=lambda r, _col=col: r.get(_col, ""),

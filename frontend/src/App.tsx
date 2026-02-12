@@ -1,8 +1,12 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { AuthGuard } from '@/components/auth/AuthGuard';
 import { AppShell } from '@/components/layout/AppShell';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { HomePage } from '@/pages/HomePage';
+import { ProfilePage } from '@/pages/ProfilePage';
+import { SignInPage } from '@/pages/SignInPage';
+import { SignUpPage } from '@/pages/SignUpPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,9 +23,19 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
+          <Route path="/signin" element={<SignInPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/" element={<AppShell />}>
             <Route index element={<HomePage />} />
             <Route path="dashboard" element={<DashboardPage />} />
+            <Route
+              path="profile"
+              element={
+                <AuthGuard>
+                  <ProfilePage />
+                </AuthGuard>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>

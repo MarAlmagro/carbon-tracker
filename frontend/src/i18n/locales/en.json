@@ -29,11 +29,20 @@
     "signUp": "Sign Up",
     "email": "Email",
     "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create Account",
     "forgotPassword": "Forgot password?",
     "noAccount": "Don't have an account?",
     "hasAccount": "Already have an account?",
     "continueAsGuest": "Continue as guest",
-    "guestNote": "Your data will be saved locally. Create an account to sync across devices."
+    "guestNote": "Your data will be saved locally. Create an account to sync across devices.",
+    "memberSince": "Member Since",
+    "acceptTerms": "I accept the Terms of Service and Privacy Policy",
+    "passwordWeak": "Weak",
+    "passwordMedium": "Medium",
+    "passwordStrong": "Strong",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 8 characters"
   },
   "dashboard": {
     "title": "Your Carbon Footprint",
@@ -49,7 +58,9 @@
     "trend": "Trend Over Time",
     "noData": "No activities logged yet",
     "startTracking": "Start tracking your footprint",
-    "recent": "Recent Activities"
+    "recent": "Recent Activities",
+    "activities": "Activities",
+    "avgDaily": "Average Daily"
   },
   "activity": {
     "log": "Log Activity",

@@ -29,11 +29,20 @@
     "signUp": "Registrarse",
     "email": "Correo electrónico",
     "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "createAccount": "Crear Cuenta",
     "forgotPassword": "¿Olvidaste tu contraseña?",
     "noAccount": "¿No tienes cuenta?",
     "hasAccount": "¿Ya tienes cuenta?",
     "continueAsGuest": "Continuar como invitado",
-    "guestNote": "Tus datos se guardarán localmente. Crea una cuenta para sincronizar entre dispositivos."
+    "guestNote": "Tus datos se guardarán localmente. Crea una cuenta para sincronizar entre dispositivos.",
+    "memberSince": "Miembro Desde",
+    "acceptTerms": "Acepto los Términos de Servicio y la Política de Privacidad",
+    "passwordWeak": "Débil",
+    "passwordMedium": "Media",
+    "passwordStrong": "Fuerte",
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres"
   },
   "dashboard": {
     "title": "Tu Huella de Carbono",
@@ -49,7 +58,9 @@
     "trend": "Tendencia en el Tiempo",
     "noData": "Aún no hay actividades registradas",
     "startTracking": "Comienza a registrar tu huella",
-    "recent": "Actividades Recientes"
+    "recent": "Actividades Recientes",
+    "activities": "Actividades",
+    "avgDaily": "Promedio Diario"
   },
   "activity": {
     "log": "Registrar Actividad",

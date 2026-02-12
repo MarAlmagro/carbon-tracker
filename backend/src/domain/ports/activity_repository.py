@@ -1,6 +1,7 @@
 """Activity repository port (interface)."""
 
 from abc import ABC, abstractmethod
+from datetime import date
 from uuid import UUID
 
 from domain.entities.activity import Activity
@@ -69,6 +70,43 @@ class ActivityRepository(ABC):
 
         Returns:
             List of activities ordered by date (most recent first)
+        """
+        pass
+
+    @abstractmethod
+    async def migrate_session_to_user(self, user_id: UUID, session_id: str) -> int:
+        """Migrate anonymous activities from session to authenticated user.
+
+        Updates all activities with matching session_id and no user_id
+        to be owned by the specified user.
+
+        Args:
+            user_id: Authenticated user's ID
+            session_id: Anonymous session identifier
+
+        Returns:
+            Count of activities migrated
+        """
+        pass
+
+    @abstractmethod
+    async def list_by_date_range(
+        self,
+        user_id: UUID | None,
+        session_id: str | None,
+        start_date: date,
+        end_date: date,
+    ) -> list[Activity]:
+        """List activities within a date range for user or session.
+
+        Args:
+            user_id: User ID if authenticated
+            session_id: Session ID for anonymous users
+            start_date: Start of date range (inclusive)
+            end_date: End of date range (inclusive)
+
+        Returns:
+            List of activities ordered by date ascending
         """
         pass
 
