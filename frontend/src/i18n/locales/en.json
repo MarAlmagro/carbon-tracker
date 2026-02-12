@@ -140,12 +140,29 @@
     "title": "Regional Comparison",
     "yourFootprint": "Your Footprint",
     "regionalAverage": "Regional Average",
+    "region": "Region",
+    "period": "Period",
     "percentile": "You're in the {{percentile}}th percentile",
     "betterThan": "{{percent}}% better than average",
     "worseThan": "{{percent}}% higher than average",
     "selectRegion": "Select your region",
     "detecting": "Detecting your location...",
-    "changeRegion": "Change region"
+    "changeRegion": "Change region",
+    "rating": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "average": "Average",
+      "above_average": "Above Average",
+      "high": "High"
+    },
+    "noData": "No data to compare yet",
+    "startTracking": "Start tracking to compare your footprint",
+    "insights": "Insights & Recommendations",
+    "breakdown": "Category Breakdown",
+    "chart": "Comparison Chart",
+    "you": "You",
+    "average": "Average",
+    "world": "World Average"
   },
   "settings": {
     "title": "Settings",

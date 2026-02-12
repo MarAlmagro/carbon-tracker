@@ -27,6 +27,12 @@ export function Navigation() {
           >
             {t('nav.dashboard', 'Dashboard')}
           </Link>
+          <Link
+            to="/compare"
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
+            {t('nav.compare', 'Compare')}
+          </Link>
           {isAuthenticated ? (
             <Link
               to="/profile"
