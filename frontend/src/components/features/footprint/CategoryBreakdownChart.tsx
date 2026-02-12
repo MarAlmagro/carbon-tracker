@@ -52,9 +52,9 @@ export const CategoryBreakdownChart = memo(function CategoryBreakdownChart({ dat
             fill="#8884d8"
             dataKey="value"
           >
-            {chartData.map((entry, index) => (
+            {chartData.map((entry) => (
               <Cell
-                key={`cell-${index}`}
+                key={entry.category}
                 fill={COLORS[entry.category] || '#8884d8'}
               />
             ))}
