@@ -151,7 +151,7 @@ async def test_create_activity_validates_value_max(override_supabase):
             json={
                 "category": "transport",
                 "type": "car_petrol",
-                "value": 15000.0,
+                "value": 150000.0,
                 "date": "2024-01-15",
             },
             headers={"X-Session-ID": "test-session-123"},
