@@ -35,7 +35,9 @@ def truncate_tables():
         for table_name in TABLES:
             # Delete all rows (Supabase client doesn't support TRUNCATE directly)
             # Using delete with a filter that matches all rows
-            client.table(table_name).delete().neq("id", "00000000-0000-0000-0000-000000000000").execute()
+            client.table(table_name).delete().neq(
+                "id", "00000000-0000-0000-0000-000000000000"
+            ).execute()
             print(f"  ✓ Truncated: {table_name}")
 
         print(f"\n✅ Truncated {len(TABLES)} tables")
@@ -43,7 +45,9 @@ def truncate_tables():
     except ImportError as e:
         print(f"Import error: {e}")
         print("\nCannot connect to database.")
-        print("Ensure SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY are set in backend/.env")
+        print(
+            "Ensure SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY are set in backend/.env"
+        )
         sys.exit(1)
     except Exception as e:
         print(f"\n❌ Error truncating tables: {e}")

@@ -7,7 +7,7 @@ from fastapi import Header
 
 
 async def get_optional_user(
-    authorization: Annotated[str | None, Header()] = None
+    authorization: Annotated[str | None, Header()] = None,
 ) -> UUID | None:
     """Get authenticated user ID from JWT token (stub).
 
@@ -25,7 +25,7 @@ async def get_optional_user(
 
 
 async def get_session_id(
-    x_session_id: Annotated[str | None, Header()] = None
+    x_session_id: Annotated[str | None, Header()] = None,
 ) -> str | None:
     """Get session ID for anonymous users.
 
