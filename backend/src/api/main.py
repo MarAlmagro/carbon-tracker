@@ -8,6 +8,7 @@ from api.middleware.error_handler import add_exception_handlers
 from api.routes import (
     activities,
     airports,
+    comparison,
     emission_factors,
     flights,
     footprint,
@@ -73,6 +74,11 @@ def create_app() -> FastAPI:
     )
     app.include_router(airports.router, prefix="/api/v1", tags=["airports"])
     app.include_router(flights.router, prefix="/api/v1", tags=["flights"])
+    app.include_router(
+        comparison.router,
+        prefix="/api/v1/comparison",
+        tags=["comparison"],
+    )
 
     return app
 
