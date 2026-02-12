@@ -72,7 +72,11 @@ async def test_get_summary_endpoint(supabase_with_activities):
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get(
             "/api/v1/footprint/summary",
-            params={"period": "month", "start_date": "2026-02-01", "end_date": "2026-02-28"},
+            params={
+                "period": "month",
+                "start_date": "2026-02-01",
+                "end_date": "2026-02-28",
+            },
             headers={"X-Session-ID": SESSION_ID},
         )
 
@@ -95,16 +99,20 @@ async def test_summary_with_no_activities(supabase_empty):
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get(
             "/api/v1/footprint/summary",
-            params={"period": "month", "start_date": "2026-02-01", "end_date": "2026-02-28"},
+            params={
+                "period": "month",
+                "start_date": "2026-02-01",
+                "end_date": "2026-02-28",
+            },
             headers={"X-Session-ID": SESSION_ID},
         )
 
     assert response.status_code == 200
     data = response.json()
-    assert data["total_co2e_kg"] == 0.0
+    assert data["total_co2e_kg"] == pytest.approx(0.0, abs=1e-9)
     assert data["activity_count"] == 0
-    assert data["change_percentage"] == 0.0
-    assert data["average_daily_co2e_kg"] == 0.0
+    assert data["change_percentage"] == pytest.approx(0.0, abs=1e-9)
+    assert data["average_daily_co2e_kg"] == pytest.approx(0.0, abs=1e-9)
 
 
 # --- GET /api/v1/footprint/breakdown ---
@@ -117,7 +125,11 @@ async def test_get_breakdown_endpoint(supabase_with_activities):
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get(
             "/api/v1/footprint/breakdown",
-            params={"period": "month", "start_date": "2026-02-01", "end_date": "2026-02-28"},
+            params={
+                "period": "month",
+                "start_date": "2026-02-01",
+                "end_date": "2026-02-28",
+            },
             headers={"X-Session-ID": SESSION_ID},
         )
 
@@ -151,7 +163,11 @@ async def test_get_trend_endpoint(supabase_with_activities):
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get(
             "/api/v1/footprint/trend",
-            params={"period": "month", "start_date": "2026-02-01", "end_date": "2026-02-28"},
+            params={
+                "period": "month",
+                "start_date": "2026-02-01",
+                "end_date": "2026-02-28",
+            },
             headers={"X-Session-ID": SESSION_ID},
         )
 
@@ -172,7 +188,7 @@ async def test_get_trend_endpoint(supabase_with_activities):
     assert points_by_date["2026-02-12"]["co2e_kg"] == pytest.approx(8.0)
     assert points_by_date["2026-02-15"]["co2e_kg"] == pytest.approx(2.0)
     # Days with no activity should be zero
-    assert points_by_date["2026-02-01"]["co2e_kg"] == 0.0
+    assert points_by_date["2026-02-01"]["co2e_kg"] == pytest.approx(0.0, abs=1e-9)
 
 
 # --- Filtering ---
@@ -185,11 +201,15 @@ async def test_summary_filters_by_session_id(supabase_with_activities):
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get(
             "/api/v1/footprint/summary",
-            params={"period": "month", "start_date": "2026-02-01", "end_date": "2026-02-28"},
+            params={
+                "period": "month",
+                "start_date": "2026-02-01",
+                "end_date": "2026-02-28",
+            },
             headers={"X-Session-ID": "other-session-no-data"},
         )
 
     assert response.status_code == 200
     data = response.json()
-    assert data["total_co2e_kg"] == 0.0
+    assert data["total_co2e_kg"] == pytest.approx(0.0, abs=1e-9)
     assert data["activity_count"] == 0
