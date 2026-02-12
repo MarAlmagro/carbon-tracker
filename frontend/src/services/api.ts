@@ -1,3 +1,5 @@
+import { useAuthStore } from '@/store/authStore';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export interface HealthResponse {
@@ -33,6 +35,16 @@ export interface EmissionFactor {
   source?: string;
 }
 
+export interface UserResponse {
+  id: string;
+  email: string;
+  created_at: string;
+}
+
+export interface MigrateActivitiesResponse {
+  migrated_count: number;
+}
+
 export class ApiClient {
   private readonly baseUrl: string;
 
@@ -40,11 +52,29 @@ export class ApiClient {
     this.baseUrl = baseUrl;
   }
 
+  private getAuthHeaders(): Record<string, string> {
+    const headers: Record<string, string> = {};
+    const state = useAuthStore.getState();
+
+    if (state.session?.access_token) {
+      headers['Authorization'] = `Bearer ${state.session.access_token}`;
+    }
+
+    if (state.sessionId) {
+      headers['X-Session-ID'] = state.sessionId;
+    }
+
+    return headers;
+  }
+
   async request<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const authHeaders = this.getAuthHeaders();
+
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        ...authHeaders,
         ...options?.headers,
       },
     });
@@ -63,27 +93,34 @@ export class ApiClient {
     return this.request<HealthResponse>('/api/v1/health');
   }
 
-  async createActivity(input: ActivityInput, sessionId: string): Promise<Activity> {
+  async createActivity(input: ActivityInput): Promise<Activity> {
     return this.request<Activity>('/api/v1/activities', {
       method: 'POST',
-      headers: {
-        'X-Session-ID': sessionId,
-      },
       body: JSON.stringify(input),
     });
   }
 
-  async listActivities(sessionId: string, limit = 50): Promise<Activity[]> {
-    return this.request<Activity[]>(`/api/v1/activities?limit=${limit}`, {
-      headers: {
-        'X-Session-ID': sessionId,
-      },
-    });
+  async listActivities(limit = 50): Promise<Activity[]> {
+    return this.request<Activity[]>(`/api/v1/activities?limit=${limit}`);
   }
 
   async getEmissionFactors(category?: string): Promise<EmissionFactor[]> {
     const query = category ? `?category=${category}` : '';
     return this.request<EmissionFactor[]>(`/api/v1/emission-factors${query}`);
+  }
+
+  async getCurrentUser(): Promise<UserResponse> {
+    return this.request<UserResponse>('/api/v1/users/me');
+  }
+
+  async migrateActivities(sessionId: string): Promise<MigrateActivitiesResponse> {
+    return this.request<MigrateActivitiesResponse>(
+      '/api/v1/users/me/migrate-activities',
+      {
+        method: 'POST',
+        body: JSON.stringify({ session_id: sessionId }),
+      }
+    );
   }
 }
 

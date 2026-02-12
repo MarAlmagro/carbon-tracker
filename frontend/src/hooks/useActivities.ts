@@ -3,24 +3,25 @@ import { apiClient, type ActivityInput } from '@/services/api';
 import { useAuth } from './useAuth';
 
 export function useActivities() {
-  const { sessionId } = useAuth();
+  const { sessionId, isAuthenticated } = useAuth();
 
   return useQuery({
-    queryKey: ['activities', sessionId],
-    queryFn: () => apiClient.listActivities(sessionId),
-    enabled: !!sessionId,
+    queryKey: ['activities', isAuthenticated, sessionId],
+    queryFn: () => apiClient.listActivities(),
+    enabled: !!sessionId || isAuthenticated,
   });
 }
 
 export function useCreateActivity() {
-  const { sessionId } = useAuth();
+  const { sessionId, isAuthenticated } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (input: ActivityInput) =>
-      apiClient.createActivity(input, sessionId),
+    mutationFn: (input: ActivityInput) => apiClient.createActivity(input),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['activities', sessionId] });
+      queryClient.invalidateQueries({
+        queryKey: ['activities', isAuthenticated, sessionId],
+      });
     },
   });
 }

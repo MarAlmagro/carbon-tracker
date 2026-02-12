@@ -73,6 +73,22 @@ class ActivityRepository(ABC):
         pass
 
     @abstractmethod
+    async def migrate_session_to_user(self, user_id: UUID, session_id: str) -> int:
+        """Migrate anonymous activities from session to authenticated user.
+
+        Updates all activities with matching session_id and no user_id
+        to be owned by the specified user.
+
+        Args:
+            user_id: Authenticated user's ID
+            session_id: Anonymous session identifier
+
+        Returns:
+            Count of activities migrated
+        """
+        pass
+
+    @abstractmethod
     async def delete(self, activity_id: UUID) -> bool:
         """Delete activity by ID.
 
