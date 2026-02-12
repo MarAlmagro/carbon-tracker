@@ -14,6 +14,7 @@ class ActivityInput(BaseModel):
     value: float = Field(..., gt=0, le=10000)
     date: date
     notes: str | None = Field(None, max_length=500)
+    metadata: dict | None = Field(None, description="Optional metadata (e.g., flight origin/destination)")
 
 
 class ActivityResponse(BaseModel):
@@ -26,6 +27,7 @@ class ActivityResponse(BaseModel):
     co2e_kg: float
     date: date
     notes: str | None
+    metadata: dict | None
     created_at: datetime
 
     model_config = {"from_attributes": True}
