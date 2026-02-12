@@ -34,13 +34,13 @@ cd carbon-tracker
 cd backend
 
 # Create virtual environment
-python -m venv venv
+python -m venv .venv
 
 # Activate (Windows)
-venv\Scripts\activate
+.venv\Scripts\activate
 
 # Activate (Linux/Mac)
-source venv/bin/activate
+source .venv/bin/activate
 ```
 
 ### 3. Install Dependencies
@@ -224,7 +224,7 @@ Services:
 **Issue:** `ModuleNotFoundError: No module named 'fastapi'`
 **Solution:** Activate virtual environment and reinstall dependencies
 ```bash
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 pip install -r requirements.txt
 ```
 
@@ -319,7 +319,7 @@ git checkout -b feature/activity-logging
 
 # 3. Start backend (terminal 1)
 cd backend
-source venv/bin/activate
+source .venv/bin/activate
 uvicorn src.api.main:app --reload
 
 # 4. Start frontend (terminal 2)
@@ -356,7 +356,7 @@ git push origin feature/activity-logging
 ### VS Code (settings.json)
 ```json
 {
-  "python.defaultInterpreterPath": "${workspaceFolder}/backend/venv/bin/python",
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv/bin/python",
   "python.linting.enabled": true,
   "python.linting.ruffEnabled": true,
   "python.formatting.provider": "none",

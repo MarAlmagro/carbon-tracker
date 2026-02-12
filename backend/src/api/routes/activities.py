@@ -44,6 +44,7 @@ async def create_activity(
             notes=input.notes,
             user_id=user_id,
             session_id=session_id,
+            metadata=input.metadata,
         )
         return ActivityResponse(
             id=activity.id,
@@ -53,6 +54,7 @@ async def create_activity(
             co2e_kg=activity.co2e_kg,
             date=activity.date,
             notes=activity.notes,
+            metadata=activity.metadata,
             created_at=activity.created_at,
         )
     except ValueError as e:
@@ -96,6 +98,7 @@ async def list_activities(
             co2e_kg=activity.co2e_kg,
             date=activity.date,
             notes=activity.notes,
+            metadata=activity.metadata,
             created_at=activity.created_at,
         )
         for activity in activities

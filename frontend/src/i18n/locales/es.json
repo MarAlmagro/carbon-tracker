@@ -64,6 +64,8 @@
   },
   "activity": {
     "log": "Registrar Actividad",
+    "logging": "Registrando...",
+    "logActivity": "Registrar Actividad",
     "category": "Categoría",
     "type": "Tipo",
     "value": "Valor",
@@ -80,6 +82,8 @@
     "transport": {
       "title": "Transporte",
       "distance": "Distancia (km)",
+      "ground": "Terrestre",
+      "flight": "Vuelo",
       "types": {
         "car_petrol": "Coche (Gasolina)",
         "car_diesel": "Coche (Diésel)",
@@ -91,6 +95,23 @@
         "bike": "Bicicleta",
         "walk": "Caminar"
       }
+    },
+    "flight": {
+      "label": "Vuelo",
+      "origin": "Aeropuerto de Origen",
+      "destination": "Aeropuerto de Destino",
+      "searchAirport": "Buscar por ciudad o código de aeropuerto...",
+      "searchOrigin": "Buscar aeropuerto de origen",
+      "searchDestination": "Buscar aeropuerto de destino",
+      "noAirportsFound": "No se encontraron aeropuertos",
+      "calculating": "Calculando detalles del vuelo...",
+      "distance": "Distancia",
+      "type": "Tipo de Vuelo",
+      "domestic": "Nacional",
+      "international": "Internacional",
+      "shortHaul": "Corta Distancia",
+      "mediumHaul": "Media Distancia",
+      "longHaul": "Larga Distancia"
     },
     "energy": {
       "title": "Energía del Hogar",

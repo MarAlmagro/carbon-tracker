@@ -20,6 +20,7 @@ class Activity:
         co2e_kg: Calculated CO2 equivalent in kilograms
         date: Date when activity occurred
         notes: Optional user notes
+        metadata: Optional metadata dict (e.g., flight origin/destination)
         user_id: User ID if authenticated, None for anonymous
         session_id: Session ID for anonymous users
         created_at: Timestamp when activity was logged
@@ -32,6 +33,7 @@ class Activity:
     co2e_kg: float
     date: date
     notes: str | None
+    metadata: dict | None
     user_id: UUID | None
     session_id: str | None
     created_at: datetime

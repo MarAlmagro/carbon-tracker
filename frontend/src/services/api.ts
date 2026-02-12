@@ -15,6 +15,7 @@ export interface Activity {
   co2e_kg: number;
   date: string;
   notes?: string;
+  metadata?: Record<string, unknown>;
   created_at: string;
 }
 
@@ -24,6 +25,7 @@ export interface ActivityInput {
   value: number;
   date: string;
   notes?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface EmissionFactor {
@@ -77,6 +79,34 @@ export interface FootprintTrend {
   }>;
   total_co2e_kg: number;
   average_co2e_kg: number;
+}
+
+export interface Airport {
+  iata_code: string;
+  name: string;
+  city: string;
+  country: string;
+  country_code: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface AirportSearchResponse {
+  results: Airport[];
+}
+
+export interface FlightCalculationRequest {
+  origin_iata: string;
+  destination_iata: string;
+}
+
+export interface FlightCalculation {
+  origin_iata: string;
+  destination_iata: string;
+  distance_km: number;
+  flight_type: string;
+  is_domestic: boolean;
+  haul_type: string;
 }
 
 export class ApiClient {
@@ -166,6 +196,18 @@ export class ApiClient {
 
   async getFootprintTrend(period: string = 'month'): Promise<FootprintTrend> {
     return this.request<FootprintTrend>(`/api/v1/footprint/trend?period=${period}`);
+  }
+
+  async searchAirports(query: string, limit: number = 10): Promise<AirportSearchResponse> {
+    const params = new URLSearchParams({ q: query, limit: limit.toString() });
+    return this.request<AirportSearchResponse>(`/api/v1/airports/search?${params}`);
+  }
+
+  async calculateFlight(request: FlightCalculationRequest): Promise<FlightCalculation> {
+    return this.request<FlightCalculation>('/api/v1/flights/calculate', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    });
   }
 }
 
