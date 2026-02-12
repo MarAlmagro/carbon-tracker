@@ -3,16 +3,18 @@ import { useTranslation } from 'react-i18next';
 interface PeriodSelectorProps {
   readonly value: string;
   readonly onChange: (period: string) => void;
+  readonly options?: readonly string[];
 }
 
-const PERIODS = ['day', 'week', 'month', 'year', 'all'] as const;
+const DEFAULT_PERIODS = ['day', 'week', 'month', 'year', 'all'] as const;
 
-export function PeriodSelector({ value, onChange }: PeriodSelectorProps) {
+export function PeriodSelector({ value, onChange, options }: PeriodSelectorProps) {
   const { t } = useTranslation();
+  const periods = options ?? DEFAULT_PERIODS;
 
   return (
     <div className="flex flex-wrap gap-1 border-b border-border pb-1">
-      {PERIODS.map((period) => (
+      {periods.map((period) => (
         <button
           key={period}
           type="button"
