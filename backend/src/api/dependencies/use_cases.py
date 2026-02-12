@@ -1,5 +1,6 @@
 """Use case dependency injection."""
 
+from functools import lru_cache
 from pathlib import Path
 
 from fastapi import Depends
@@ -100,8 +101,9 @@ AIRPORTS_DATA_FILE = (
 )
 
 
+@lru_cache(maxsize=1)
 def get_airport_repository() -> JSONAirportRepository:
-    """Get JSONAirportRepository with airport data.
+    """Get JSONAirportRepository with airport data (singleton).
 
     Returns:
         Configured JSONAirportRepository instance
@@ -109,8 +111,9 @@ def get_airport_repository() -> JSONAirportRepository:
     return JSONAirportRepository(AIRPORTS_DATA_FILE)
 
 
+@lru_cache(maxsize=1)
 def get_calculate_flight_use_case() -> CalculateFlightUseCase:
-    """Get CalculateFlightUseCase with injected dependencies.
+    """Get CalculateFlightUseCase with injected dependencies (singleton).
 
     Returns:
         Configured CalculateFlightUseCase instance
