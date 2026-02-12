@@ -43,6 +43,7 @@ class SupabaseActivityRepository(ActivityRepository):
             "co2e_kg": activity.co2e_kg,
             "date": activity.date.isoformat(),
             "notes": activity.notes,
+            "metadata": activity.metadata,
             "user_id": str(activity.user_id) if activity.user_id else None,
             "session_id": activity.session_id,
         }
@@ -202,6 +203,7 @@ class SupabaseActivityRepository(ActivityRepository):
             if isinstance(row["date"], str)
             else row["date"],
             notes=row.get("notes"),
+            metadata=row.get("metadata"),
             user_id=UUID(row["user_id"]) if row.get("user_id") else None,
             session_id=row.get("session_id"),
             created_at=datetime.fromisoformat(row["created_at"])

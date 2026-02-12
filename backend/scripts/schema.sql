@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS activities (
     co2e_kg     DECIMAL(10, 6) NOT NULL,
     date        DATE         NOT NULL,
     notes       TEXT,
+    metadata    JSONB,
     created_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at  TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
