@@ -216,7 +216,6 @@ docker-compose down
 Services:
 - Backend: `http://localhost:8000`
 - Frontend: `http://localhost:5173`
-- PostgreSQL: `localhost:5432`
 
 ## Troubleshooting
 
