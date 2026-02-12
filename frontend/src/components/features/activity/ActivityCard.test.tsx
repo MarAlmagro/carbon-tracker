@@ -108,4 +108,62 @@ describe('ActivityCard', () => {
     expect(screen.getByText(/Flight/)).toBeInTheDocument();
     expect(screen.queryByText('→')).not.toBeInTheDocument();
   });
+
+  it('renders energy activity with kWh unit and CO2e', () => {
+    const energyActivity: Activity = {
+      ...baseActivity,
+      category: 'energy',
+      type: 'electricity',
+      value: 350,
+      co2e_kg: 72.47,
+    };
+    renderWithI18n(<ActivityCard activity={energyActivity} />);
+
+    expect(screen.getByText(/350/)).toBeInTheDocument();
+    expect(screen.getByText(/kWh/)).toBeInTheDocument();
+    expect(screen.getByText(/72\.47 kg CO2e/)).toBeInTheDocument();
+  });
+
+  it('renders heating oil activity with liters unit', () => {
+    const heatingOilActivity: Activity = {
+      ...baseActivity,
+      category: 'energy',
+      type: 'heating_oil',
+      value: 100,
+      co2e_kg: 254.04,
+    };
+    renderWithI18n(<ActivityCard activity={heatingOilActivity} />);
+
+    expect(screen.getByText(/100/)).toBeInTheDocument();
+    expect(screen.getByText(/liters/)).toBeInTheDocument();
+    expect(screen.getByText(/254\.04 kg CO2e/)).toBeInTheDocument();
+  });
+
+  it('renders food activity with servings unit and CO2e', () => {
+    const foodActivity: Activity = {
+      ...baseActivity,
+      category: 'food',
+      type: 'beef',
+      value: 2,
+      co2e_kg: 54,
+    };
+    renderWithI18n(<ActivityCard activity={foodActivity} />);
+
+    expect(screen.getByText(/2 servings/)).toBeInTheDocument();
+    expect(screen.getByText(/54\.00 kg CO2e/)).toBeInTheDocument();
+  });
+
+  it('renders singular serving for food with value 1', () => {
+    const foodActivity: Activity = {
+      ...baseActivity,
+      category: 'food',
+      type: 'vegan_meal',
+      value: 1,
+      co2e_kg: 0.5,
+    };
+    renderWithI18n(<ActivityCard activity={foodActivity} />);
+
+    expect(screen.getByText(/1 serving/)).toBeInTheDocument();
+    expect(screen.getByText(/0\.50 kg CO2e/)).toBeInTheDocument();
+  });
 });
