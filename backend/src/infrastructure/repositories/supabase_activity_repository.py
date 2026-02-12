@@ -116,6 +116,25 @@ class SupabaseActivityRepository(ActivityRepository):
         )
         return [self._row_to_entity(row) for row in result.data]
 
+    async def migrate_session_to_user(self, user_id: UUID, session_id: str) -> int:
+        """Migrate anonymous activities from session to authenticated user.
+
+        Args:
+            user_id: Authenticated user's ID
+            session_id: Anonymous session identifier
+
+        Returns:
+            Count of activities migrated
+        """
+        result = (
+            self._client.table(self.TABLE)
+            .update({"user_id": str(user_id)})
+            .eq("session_id", session_id)
+            .is_("user_id", "null")
+            .execute()
+        )
+        return len(result.data) if result.data else 0
+
     async def delete(self, activity_id: UUID) -> bool:
         """Delete activity by ID.
 
