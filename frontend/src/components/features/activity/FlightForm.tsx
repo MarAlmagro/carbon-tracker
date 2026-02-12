@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
-import { useCreateActivity } from '@/hooks/useActivities';
+import { useCreateActivity, useEmissionFactors } from '@/hooks/useActivities';
 import { Airport, apiClient, FlightCalculation } from '@/services/api';
 import { AirportAutocomplete } from './AirportAutocomplete';
 
@@ -27,8 +27,16 @@ interface FlightFormProps {
 export function FlightForm({ onSuccess }: FlightFormProps) {
   const { t } = useTranslation();
   const createActivity = useCreateActivity();
+  const { data: transportFactors } = useEmissionFactors('transport');
   const [flightCalc, setFlightCalc] = useState<FlightCalculation | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
+
+  const estimatedCo2e = flightCalc && transportFactors
+    ? (() => {
+        const factor = transportFactors.find((f) => f.type === flightCalc.flight_type);
+        return factor ? Math.round(flightCalc.distance_km * factor.factor * 100) / 100 : null;
+      })()
+    : null;
 
   const {
     control,
@@ -40,8 +48,8 @@ export function FlightForm({ onSuccess }: FlightFormProps) {
   } = useForm<FlightFormData>({
     resolver: zodResolver(flightSchema),
     defaultValues: {
-      origin: null,
-      destination: null,
+      origin: undefined,
+      destination: undefined,
       date: new Date().toISOString().split('T')[0],
       notes: '',
     },
@@ -51,9 +59,12 @@ export function FlightForm({ onSuccess }: FlightFormProps) {
   const destination = watch('destination');
 
   // Calculate flight when both airports are selected
+  const originIata = origin?.iata_code;
+  const destIata = destination?.iata_code;
+
   useEffect(() => {
     const calculateFlight = async () => {
-      if (!origin || !destination) {
+      if (!originIata || !destIata) {
         setFlightCalc(null);
         return;
       }
@@ -61,8 +72,8 @@ export function FlightForm({ onSuccess }: FlightFormProps) {
       setIsCalculating(true);
       try {
         const result = await apiClient.calculateFlight({
-          origin_iata: origin.iata_code,
-          destination_iata: destination.iata_code,
+          origin_iata: originIata,
+          destination_iata: destIata,
         });
         setFlightCalc(result);
       } catch (error) {
@@ -74,7 +85,7 @@ export function FlightForm({ onSuccess }: FlightFormProps) {
     };
 
     calculateFlight();
-  }, [origin, destination]);
+  }, [originIata, destIata]);
 
   const onSubmit = async (data: FlightFormData) => {
     if (!flightCalc) {
@@ -184,6 +195,16 @@ export function FlightForm({ onSuccess }: FlightFormProps) {
               • {getHaulTypeLabel(flightCalc.haul_type)}
             </span>
           </div>
+          {estimatedCo2e !== null && (
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                {t('activity.flight.estimatedCo2e', 'Estimated CO₂e')}:
+              </span>
+              <span className="text-sm font-bold text-green-700 dark:text-green-300" data-testid="flight-co2e-estimate">
+                {estimatedCo2e.toFixed(2)} kg
+              </span>
+            </div>
+          )}
         </div>
       )}
 
