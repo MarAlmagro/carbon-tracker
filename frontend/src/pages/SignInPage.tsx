@@ -103,6 +103,9 @@ export function SignInPage() {
         </form>
 
         <div className="text-center space-y-3 text-sm">
+          <Link to="/forgot-password" className="text-primary font-medium hover:underline">
+            {t('auth.forgotPassword')}
+          </Link>
           <p>
             {t('auth.noAccount')}{' '}
             <Link to="/signup" className="text-primary font-medium hover:underline">
