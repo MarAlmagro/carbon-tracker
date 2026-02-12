@@ -9,14 +9,19 @@ from supabase import Client
 from api.dependencies.database import get_supabase
 from domain.services.aggregation_service import AggregationService
 from domain.services.calculation_service import CalculationService
+from domain.services.comparison_service import ComparisonService
 from domain.services.flight_distance_service import FlightDistanceService
 from domain.use_cases.calculate_flight import CalculateFlightUseCase
+from domain.use_cases.compare_to_region import CompareToRegionUseCase
 from domain.use_cases.get_footprint_breakdown import GetFootprintBreakdownUseCase
 from domain.use_cases.get_footprint_summary import GetFootprintSummaryUseCase
 from domain.use_cases.get_footprint_trend import GetFootprintTrendUseCase
 from domain.use_cases.log_activity import LogActivityUseCase
 from infrastructure.repositories.json_airport_repository import (
     JSONAirportRepository,
+)
+from infrastructure.repositories.json_region_data_provider import (
+    JSONRegionDataProvider,
 )
 from infrastructure.repositories.supabase_activity_repository import (
     SupabaseActivityRepository,
@@ -100,6 +105,14 @@ AIRPORTS_DATA_FILE = (
     Path(__file__).parent.parent.parent / "infrastructure" / "data" / "airports.json"
 )
 
+# Regional data file path
+REGIONAL_DATA_FILE = (
+    Path(__file__).parent.parent.parent
+    / "infrastructure"
+    / "data"
+    / "regional_averages.json"
+)
+
 
 @lru_cache(maxsize=1)
 def get_airport_repository() -> JSONAirportRepository:
@@ -112,6 +125,16 @@ def get_airport_repository() -> JSONAirportRepository:
 
 
 @lru_cache(maxsize=1)
+def get_region_data_provider() -> JSONRegionDataProvider:
+    """Get JSONRegionDataProvider with regional data (singleton).
+
+    Returns:
+        Configured JSONRegionDataProvider instance
+    """
+    return JSONRegionDataProvider(REGIONAL_DATA_FILE)
+
+
+@lru_cache(maxsize=1)
 def get_calculate_flight_use_case() -> CalculateFlightUseCase:
     """Get CalculateFlightUseCase with injected dependencies (singleton).
 
@@ -121,4 +144,23 @@ def get_calculate_flight_use_case() -> CalculateFlightUseCase:
     return CalculateFlightUseCase(
         airport_repo=get_airport_repository(),
         distance_service=FlightDistanceService(),
+    )
+
+
+def get_compare_to_region_use_case(
+    client: Client = Depends(get_supabase),
+) -> CompareToRegionUseCase:
+    """Get CompareToRegionUseCase with injected dependencies.
+
+    Args:
+        client: Supabase client from dependency
+
+    Returns:
+        Configured CompareToRegionUseCase instance
+    """
+    return CompareToRegionUseCase(
+        activity_repo=SupabaseActivityRepository(client),
+        region_provider=get_region_data_provider(),
+        aggregation_service=AggregationService(),
+        comparison_service=ComparisonService(),
     )
