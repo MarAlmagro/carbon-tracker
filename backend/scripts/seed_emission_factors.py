@@ -162,12 +162,17 @@ EMISSION_FACTORS = [
     {
         "category": "energy",
         "type": "heating_oil",
-        "factor": 0.24680,
-        "unit": "kWh",
+        "factor": 2.54040,
+        "unit": "L",
         "source": SOURCE_DEFRA,
         "source_year": 2023,
     },
-    # Food (kg CO2e per serving/kg)
+    # Food (kg CO2e per kg of food purchased, except vegan_meal which is per serving)
+    # NOTE: The frontend displays "servings" for all food types. For meat/dairy/vegetables,
+    # 1 serving ≈ 0.15-0.25 kg depending on food type. The factor is per kg, so the
+    # backend calculates: co2e = servings * factor. This means the UI "serving" maps
+    # directly to the factor's unit (kg) — i.e., 1 serving = 1 kg for calculation purposes.
+    # Consider adding a serving_weight_kg field if more precision is needed.
     {
         "category": "food",
         "type": "beef",
