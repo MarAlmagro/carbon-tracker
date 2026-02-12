@@ -17,7 +17,9 @@
       "Bash(python -m pytest:*)",
       "Bash(..venvScriptsactivate)",
       "Bash(pip install:*)",
-      "Bash(source .venv/Scripts/activate:*)"
+      "Bash(source .venv/Scripts/activate:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(python scripts/download_airports.py:*)"
     ]
   }
 }

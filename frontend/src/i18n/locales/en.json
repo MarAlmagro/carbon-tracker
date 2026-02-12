@@ -64,6 +64,8 @@
   },
   "activity": {
     "log": "Log Activity",
+    "logging": "Logging...",
+    "logActivity": "Log Activity",
     "category": "Category",
     "type": "Type",
     "value": "Value",
@@ -80,6 +82,8 @@
     "transport": {
       "title": "Transport",
       "distance": "Distance (km)",
+      "ground": "Ground",
+      "flight": "Flight",
       "types": {
         "car_petrol": "Car (Petrol)",
         "car_diesel": "Car (Diesel)",
@@ -91,6 +95,23 @@
         "bike": "Bicycle",
         "walk": "Walking"
       }
+    },
+    "flight": {
+      "label": "Flight",
+      "origin": "Origin Airport",
+      "destination": "Destination Airport",
+      "searchAirport": "Search by city or airport code...",
+      "searchOrigin": "Search for origin airport",
+      "searchDestination": "Search for destination airport",
+      "noAirportsFound": "No airports found",
+      "calculating": "Calculating flight details...",
+      "distance": "Distance",
+      "type": "Flight Type",
+      "domestic": "Domestic",
+      "international": "International",
+      "shortHaul": "Short Haul",
+      "mediumHaul": "Medium Haul",
+      "longHaul": "Long Haul"
     },
     "energy": {
       "title": "Home Energy",
