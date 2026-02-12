@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiClient, type ActivityInput } from '@/services/api';
 import { useAuth } from './useAuth';
+import { FOOTPRINT_QUERY_KEY } from './useFootprint';
 
 export function useActivities() {
   const { sessionId, isAuthenticated } = useAuth();
@@ -21,6 +22,9 @@ export function useCreateActivity() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['activities', isAuthenticated, sessionId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [FOOTPRINT_QUERY_KEY],
       });
     },
   });

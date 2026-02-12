@@ -1,6 +1,6 @@
 """Supabase implementation of ActivityRepository port."""
 
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 from uuid import UUID
 
@@ -134,6 +134,40 @@ class SupabaseActivityRepository(ActivityRepository):
             .execute()
         )
         return len(result.data) if result.data else 0
+
+    async def list_by_date_range(
+        self,
+        user_id: UUID | None,
+        session_id: str | None,
+        start_date: date,
+        end_date: date,
+    ) -> list[Activity]:
+        """List activities within a date range.
+
+        Args:
+            user_id: User ID if authenticated
+            session_id: Session ID for anonymous users
+            start_date: Start of date range (inclusive)
+            end_date: End of date range (inclusive)
+
+        Returns:
+            List of activities ordered by date ascending
+        """
+        query = self._client.table(self.TABLE).select("*")
+
+        if user_id:
+            query = query.eq("user_id", str(user_id))
+        elif session_id:
+            query = query.eq("session_id", session_id)
+
+        query = (
+            query.gte("date", start_date.isoformat())
+            .lte("date", end_date.isoformat())
+            .order("date", desc=False)
+        )
+
+        result = query.execute()
+        return [self._row_to_entity(row) for row in result.data]
 
     async def delete(self, activity_id: UUID) -> bool:
         """Delete activity by ID.

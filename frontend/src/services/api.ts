@@ -45,6 +45,40 @@ export interface MigrateActivitiesResponse {
   migrated_count: number;
 }
 
+export interface FootprintSummary {
+  period: string;
+  start_date: string;
+  end_date: string;
+  total_co2e_kg: number;
+  activity_count: number;
+  previous_period_co2e_kg: number;
+  change_percentage: number;
+  average_daily_co2e_kg: number;
+}
+
+export interface CategoryBreakdown {
+  period: string;
+  breakdown: Array<{
+    category: string;
+    co2e_kg: number;
+    percentage: number;
+    activity_count: number;
+  }>;
+  total_co2e_kg: number;
+}
+
+export interface FootprintTrend {
+  period: string;
+  granularity: string;
+  data_points: Array<{
+    date: string;
+    co2e_kg: number;
+    activity_count: number;
+  }>;
+  total_co2e_kg: number;
+  average_co2e_kg: number;
+}
+
 export class ApiClient {
   private readonly baseUrl: string;
 
@@ -121,6 +155,17 @@ export class ApiClient {
         body: JSON.stringify({ session_id: sessionId }),
       }
     );
+  }
+  async getFootprintSummary(period: string = 'month'): Promise<FootprintSummary> {
+    return this.request<FootprintSummary>(`/api/v1/footprint/summary?period=${period}`);
+  }
+
+  async getFootprintBreakdown(period: string = 'month'): Promise<CategoryBreakdown> {
+    return this.request<CategoryBreakdown>(`/api/v1/footprint/breakdown?period=${period}`);
+  }
+
+  async getFootprintTrend(period: string = 'month'): Promise<FootprintTrend> {
+    return this.request<FootprintTrend>(`/api/v1/footprint/trend?period=${period}`);
   }
 }
 
