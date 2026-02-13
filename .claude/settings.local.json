@@ -24,7 +24,8 @@
       "Bash(.venv/Scripts/activate)",
       "Bash(.venvScriptspython -m pytest tests/ -v --tb=short)",
       "Bash(.venv/Scripts/python.exe -m pytest tests/ -v --tb=short)",
-      "Bash(.venv/Scripts/python.exe -m pytest:*)"
+      "Bash(.venv/Scripts/python.exe -m pytest:*)",
+      "Bash(npm run typecheck:*)"
     ]
   }
 }
