@@ -146,6 +146,37 @@ def _make_mock_supabase(tables: dict | None = None) -> MagicMock:
 
         table_mock.delete = _delete
 
+        # --- UPDATE ---
+        def _update(data):
+            class UpdateBuilder:
+                def __init__(self):
+                    self._data = data
+                    self._filters = []
+
+                def eq(self, col, val):
+                    self._filters.append((col, val))
+                    return self
+
+                def execute(self):
+                    from datetime import datetime, timezone
+
+                    updated = []
+                    for r in rows:
+                        match = all(str(r.get(c)) == str(v) for c, v in self._filters)
+                        if match:
+                            # Update the row with new data
+                            r.update(self._data)
+                            if "updated_at" in self._data:
+                                r["updated_at"] = self._data["updated_at"]
+                            updated.append(deepcopy(r))
+                    result = MagicMock()
+                    result.data = updated
+                    return result
+
+            return UpdateBuilder()
+
+        table_mock.update = _update
+
         return table_mock
 
     mock_client.table = _table
