@@ -111,6 +111,21 @@ class ActivityRepository(ABC):
         pass
 
     @abstractmethod
+    async def update(self, activity: Activity) -> Activity:
+        """Update existing activity.
+
+        Args:
+            activity: Activity entity with updated values
+
+        Returns:
+            Updated activity from database
+
+        Raises:
+            ValueError: If activity not found
+        """
+        pass
+
+    @abstractmethod
     async def delete(self, activity_id: UUID) -> bool:
         """Delete activity by ID.
 

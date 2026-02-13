@@ -1,6 +1,6 @@
 """Supabase implementation of ActivityRepository port."""
 
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Any
 from uuid import UUID
 
@@ -169,6 +169,37 @@ class SupabaseActivityRepository(ActivityRepository):
 
         result = query.execute()
         return [self._row_to_entity(row) for row in result.data]
+
+    async def update(self, activity: Activity) -> Activity:
+        """Update existing activity.
+
+        Args:
+            activity: Activity entity with updated values
+
+        Returns:
+            Updated activity from database
+
+        Raises:
+            ValueError: If activity not found
+        """
+        row = {
+            "type": activity.type,
+            "value": activity.value,
+            "co2e_kg": activity.co2e_kg,
+            "date": activity.date.isoformat(),
+            "notes": activity.notes,
+            "metadata": activity.metadata,
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }
+        result = (
+            self._client.table(self.TABLE)
+            .update(row)
+            .eq("id", str(activity.id))
+            .execute()
+        )
+        if not result.data:
+            raise ValueError(f"Activity not found: {activity.id}")
+        return self._row_to_entity(result.data[0])
 
     async def delete(self, activity_id: UUID) -> bool:
         """Delete activity by ID.
