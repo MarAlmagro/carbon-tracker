@@ -366,3 +366,202 @@ async def test_invalid_category(supabase_with_factors):
         )
 
     assert response.status_code == 422
+
+
+@pytest.mark.asyncio
+async def test_update_activity_success(supabase_with_factors):
+    """Test successful activity update with CO2e recalculation."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        # First create an activity
+        create_response = await client.post(
+            "/api/v1/activities",
+            json={
+                "category": "transport",
+                "type": "car_petrol",
+                "value": 25.0,
+                "date": "2024-01-15",
+                "notes": "Original commute",
+            },
+            headers={"X-Session-ID": "test-session-123"},
+        )
+        assert create_response.status_code == 201
+        activity_id = create_response.json()["id"]
+
+        # Now update it
+        update_response = await client.put(
+            f"/api/v1/activities/{activity_id}",
+            json={
+                "type": "bus",
+                "value": 30.0,
+                "date": "2024-01-16",
+                "notes": "Updated to bus",
+            },
+            headers={"X-Session-ID": "test-session-123"},
+        )
+
+    assert update_response.status_code == 200
+    data = update_response.json()
+    assert data["type"] == "bus"
+    assert data["value"] == pytest.approx(30.0)
+    assert data["date"] == "2024-01-16"
+    assert data["notes"] == "Updated to bus"
+    # 30 km * 0.089 = 2.67 kg CO2e
+    assert data["co2e_kg"] == pytest.approx(2.67, rel=0.01)
+    assert data["category"] == "transport"  # Category unchanged
+
+
+@pytest.mark.asyncio
+async def test_update_activity_not_found(supabase_with_factors):
+    """Test update returns 404 for non-existent activity."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.put(
+            "/api/v1/activities/00000000-0000-0000-0000-000000000000",
+            json={
+                "type": "bus",
+                "value": 30.0,
+                "date": "2024-01-16",
+                "notes": "Update",
+            },
+            headers={"X-Session-ID": "test-session-123"},
+        )
+
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_update_activity_unauthorized(supabase_with_factors):
+    """Test update returns 403 for different session."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        # Create activity with one session
+        create_response = await client.post(
+            "/api/v1/activities",
+            json={
+                "category": "transport",
+                "type": "car_petrol",
+                "value": 25.0,
+                "date": "2024-01-15",
+            },
+            headers={"X-Session-ID": "session-1"},
+        )
+        activity_id = create_response.json()["id"]
+
+        # Try to update with different session
+        update_response = await client.put(
+            f"/api/v1/activities/{activity_id}",
+            json={
+                "type": "bus",
+                "value": 30.0,
+                "date": "2024-01-16",
+                "notes": "Trying to update",
+            },
+            headers={"X-Session-ID": "session-2"},
+        )
+
+    assert update_response.status_code == 403
+    assert "not authorized" in update_response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_update_activity_requires_session_or_auth(supabase_with_factors):
+    """Test update requires X-Session-ID or Authorization."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.put(
+            "/api/v1/activities/00000000-0000-0000-0000-000000000000",
+            json={
+                "type": "bus",
+                "value": 30.0,
+                "date": "2024-01-16",
+                "notes": "Update",
+            },
+        )
+
+    assert response.status_code == 400
+    assert "X-Session-ID" in response.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_delete_activity_success(supabase_with_factors):
+    """Test successful activity deletion."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        # First create an activity
+        create_response = await client.post(
+            "/api/v1/activities",
+            json={
+                "category": "transport",
+                "type": "car_petrol",
+                "value": 25.0,
+                "date": "2024-01-15",
+            },
+            headers={"X-Session-ID": "test-session-123"},
+        )
+        activity_id = create_response.json()["id"]
+
+        # Now delete it
+        delete_response = await client.delete(
+            f"/api/v1/activities/{activity_id}",
+            headers={"X-Session-ID": "test-session-123"},
+        )
+
+    assert delete_response.status_code == 204
+    assert delete_response.content == b""
+
+
+@pytest.mark.asyncio
+async def test_delete_activity_not_found(supabase_with_factors):
+    """Test delete returns 404 for non-existent activity."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.delete(
+            "/api/v1/activities/00000000-0000-0000-0000-000000000000",
+            headers={"X-Session-ID": "test-session-123"},
+        )
+
+    assert response.status_code == 404
+    assert "not found" in response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_delete_activity_unauthorized(supabase_with_factors):
+    """Test delete returns 403 for different session."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        # Create activity with one session
+        create_response = await client.post(
+            "/api/v1/activities",
+            json={
+                "category": "transport",
+                "type": "car_petrol",
+                "value": 25.0,
+                "date": "2024-01-15",
+            },
+            headers={"X-Session-ID": "session-1"},
+        )
+        activity_id = create_response.json()["id"]
+
+        # Try to delete with different session
+        delete_response = await client.delete(
+            f"/api/v1/activities/{activity_id}",
+            headers={"X-Session-ID": "session-2"},
+        )
+
+    assert delete_response.status_code == 403
+    assert "not authorized" in delete_response.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_delete_activity_requires_session_or_auth(supabase_with_factors):
+    """Test delete requires X-Session-ID or Authorization."""
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.delete(
+            "/api/v1/activities/00000000-0000-0000-0000-000000000000"
+        )
+
+    assert response.status_code == 400
+    assert "X-Session-ID" in response.json()["detail"]

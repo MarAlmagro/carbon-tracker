@@ -16,7 +16,9 @@ from domain.use_cases.compare_to_region import CompareToRegionUseCase
 from domain.use_cases.get_footprint_breakdown import GetFootprintBreakdownUseCase
 from domain.use_cases.get_footprint_summary import GetFootprintSummaryUseCase
 from domain.use_cases.get_footprint_trend import GetFootprintTrendUseCase
+from domain.use_cases.delete_activity import DeleteActivityUseCase
 from domain.use_cases.log_activity import LogActivityUseCase
+from domain.use_cases.update_activity import UpdateActivityUseCase
 from infrastructure.repositories.json_airport_repository import (
     JSONAirportRepository,
 )
@@ -163,4 +165,38 @@ def get_compare_to_region_use_case(
         region_provider=get_region_data_provider(),
         aggregation_service=AggregationService(),
         comparison_service=ComparisonService(),
+    )
+
+
+def get_update_activity_use_case(
+    client: Client = Depends(get_supabase),
+) -> UpdateActivityUseCase:
+    """Get UpdateActivityUseCase with injected dependencies.
+
+    Args:
+        client: Supabase client from dependency
+
+    Returns:
+        Configured UpdateActivityUseCase instance
+    """
+    return UpdateActivityUseCase(
+        activity_repo=SupabaseActivityRepository(client),
+        emission_factor_repo=SupabaseEmissionFactorRepository(client),
+        calculation_service=CalculationService(),
+    )
+
+
+def get_delete_activity_use_case(
+    client: Client = Depends(get_supabase),
+) -> DeleteActivityUseCase:
+    """Get DeleteActivityUseCase with injected dependencies.
+
+    Args:
+        client: Supabase client from dependency
+
+    Returns:
+        Configured DeleteActivityUseCase instance
+    """
+    return DeleteActivityUseCase(
+        activity_repo=SupabaseActivityRepository(client),
     )

@@ -28,6 +28,13 @@ export interface ActivityInput {
   metadata?: Record<string, unknown>;
 }
 
+export interface ActivityUpdateInput {
+  type: string;
+  value: number;
+  date: string;
+  notes?: string;
+}
+
 export interface EmissionFactor {
   id: number;
   category: string;
@@ -198,6 +205,31 @@ export class ApiClient {
 
   async listActivities(limit = 50): Promise<Activity[]> {
     return this.request<Activity[]>(`/api/v1/activities?limit=${limit}`);
+  }
+
+  async updateActivity(id: string, input: ActivityUpdateInput): Promise<Activity> {
+    return this.request<Activity>(`/api/v1/activities/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(input),
+    });
+  }
+
+  async deleteActivity(id: string): Promise<void> {
+    const authHeaders = this.getAuthHeaders();
+
+    const response = await fetch(`${this.baseUrl}/api/v1/activities/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...authHeaders,
+      },
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({
+        detail: 'An error occurred',
+      }));
+      throw new Error(error.detail || 'API request failed');
+    }
   }
 
   async getEmissionFactors(category?: string): Promise<EmissionFactor[]> {

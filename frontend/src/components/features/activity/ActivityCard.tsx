@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Activity } from '@/hooks/useActivities';
+import { EditActivityModal } from './EditActivityModal';
+import { DeleteConfirmDialog } from './DeleteConfirmDialog';
 
 interface ActivityCardProps {
   readonly activity: Activity;
@@ -7,8 +10,10 @@ interface ActivityCardProps {
 
 export function ActivityCard({ activity }: ActivityCardProps) {
   const { t, i18n } = useTranslation();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-  const getActivityIcon = (category: string, type: string) => {
+  const getActivityIcon = (_category: string, type: string) => {
     const icons: Record<string, string> = {
       // Transport
       car_petrol: '🚗',
@@ -110,38 +115,94 @@ export function ActivityCard({ activity }: ActivityCardProps) {
   };
 
   return (
-    <li
-      className="p-4 border rounded-lg bg-card hover:bg-muted/50 transition-colors list-none"
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl" aria-hidden="true">
-            {getActivityIcon(activity.category, activity.type)}
-          </span>
-          <div>
-            <p className="font-medium">
-              {isFlightType(activity.type)
-                ? t('activity.flight.label')
-                : getTypeLabel(activity.category, activity.type)}{' '}
-              -{' '}
-              {activity.value} {getUnitLabel(activity.category, activity.type)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              <span className="font-medium text-primary">
-                {activity.co2e_kg.toFixed(2)} kg CO2e
-              </span>
-              {' | '}
-              {formatDate(activity.date)}
-            </p>
+    <>
+      <li
+        className="p-4 border rounded-lg bg-card hover:bg-muted/50 transition-colors list-none"
+      >
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-3 flex-1">
+            <span className="text-2xl" aria-hidden="true">
+              {getActivityIcon(activity.category, activity.type)}
+            </span>
+            <div className="flex-1">
+              <p className="font-medium">
+                {isFlightType(activity.type)
+                  ? t('activity.flight.label')
+                  : getTypeLabel(activity.category, activity.type)}{' '}
+                -{' '}
+                {activity.value} {getUnitLabel(activity.category, activity.type)}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                <span className="font-medium text-primary">
+                  {activity.co2e_kg.toFixed(2)} kg CO2e
+                </span>
+                {' | '}
+                {formatDate(activity.date)}
+              </p>
+            </div>
+          </div>
+
+          {/* Edit and Delete Buttons */}
+          <div className="flex gap-2 ml-4">
+            <button
+              type="button"
+              onClick={() => setIsEditModalOpen(true)}
+              className="p-2 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors"
+              aria-label={t('activity.edit')}
+              data-testid="edit-activity-button"
+              title={t('activity.edit')}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsDeleteDialogOpen(true)}
+              className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+              aria-label={t('activity.deleteActivity')}
+              data-testid="delete-activity-button"
+              title={t('activity.deleteActivity')}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
           </div>
         </div>
-      </div>
-      {renderFlightInfo()}
-      {activity.notes && (
-        <p className="mt-2 text-sm text-muted-foreground pl-11">
-          {activity.notes}
-        </p>
-      )}
-    </li>
+        {renderFlightInfo()}
+        {activity.notes && (
+          <p className="mt-2 text-sm text-muted-foreground pl-11">
+            {activity.notes}
+          </p>
+        )}
+      </li>
+
+      {/* Modals */}
+      <EditActivityModal
+        activity={activity}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+      />
+      <DeleteConfirmDialog
+        activity={activity}
+        isOpen={isDeleteDialogOpen}
+        onClose={() => setIsDeleteDialogOpen(false)}
+      />
+    </>
   );
 }

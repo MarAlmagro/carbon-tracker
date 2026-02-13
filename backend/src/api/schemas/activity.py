@@ -19,6 +19,15 @@ class ActivityInput(BaseModel):
     )
 
 
+class ActivityUpdateInput(BaseModel):
+    """Input schema for updating an activity."""
+
+    type: str = Field(..., max_length=100)
+    value: float = Field(..., gt=0, le=100000)
+    date: date
+    notes: str | None = Field(None, max_length=500)
+
+
 class ActivityResponse(BaseModel):
     """Response schema for an activity."""
 
@@ -31,6 +40,7 @@ class ActivityResponse(BaseModel):
     notes: str | None
     metadata: dict | None
     created_at: datetime
+    updated_at: datetime | None = None
 
     model_config = {"from_attributes": True}
 
