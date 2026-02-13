@@ -62,6 +62,7 @@ async def create_activity(
             notes=activity.notes,
             metadata=activity.metadata,
             created_at=activity.created_at,
+            updated_at=activity.updated_at,
         )
     except ValueError as e:
         raise HTTPException(
@@ -106,6 +107,7 @@ async def list_activities(
             notes=activity.notes,
             metadata=activity.metadata,
             created_at=activity.created_at,
+            updated_at=activity.updated_at,
         )
         for activity in activities
     ]
@@ -150,6 +152,7 @@ async def update_activity(
             notes=activity.notes,
             metadata=activity.metadata,
             created_at=activity.created_at,
+            updated_at=activity.updated_at,
         )
     except ValueError as e:
         raise HTTPException(

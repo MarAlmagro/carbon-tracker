@@ -240,4 +240,7 @@ class SupabaseActivityRepository(ActivityRepository):
             created_at=datetime.fromisoformat(row["created_at"])
             if isinstance(row["created_at"], str)
             else row["created_at"],
+            updated_at=datetime.fromisoformat(row["updated_at"])
+            if row.get("updated_at") and isinstance(row["updated_at"], str)
+            else row.get("updated_at"),
         )

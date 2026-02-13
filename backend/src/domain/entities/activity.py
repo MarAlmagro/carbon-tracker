@@ -37,6 +37,7 @@ class Activity:
     user_id: UUID | None
     session_id: str | None
     created_at: datetime
+    updated_at: datetime | None = None
 
     def __post_init__(self) -> None:
         """Validate entity invariants."""
