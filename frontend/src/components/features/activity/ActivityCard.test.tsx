@@ -1,12 +1,25 @@
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import { describe, it, expect } from 'vitest';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { describe, it, expect, vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 import i18n from '@/i18n';
 import type { Activity } from '@/hooks/useActivities';
 import { ActivityCard } from './ActivityCard';
 
-const renderWithI18n = (ui: React.ReactElement) =>
-  render(<I18nextProvider i18n={i18n}>{ui}</I18nextProvider>);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { retry: false },
+    mutations: { retry: false },
+  },
+});
+
+const renderWithProviders = (ui: React.ReactElement) =>
+  render(
+    <QueryClientProvider client={queryClient}>
+      <I18nextProvider i18n={i18n}>{ui}</I18nextProvider>
+    </QueryClientProvider>
+  );
 
 const baseActivity: Activity = {
   id: '123',
@@ -20,9 +33,17 @@ const baseActivity: Activity = {
   created_at: '2024-01-15T10:00:00Z',
 };
 
+// Mock the useAuth hook
+vi.mock('@/hooks/useAuth', () => ({
+  useAuth: () => ({
+    sessionId: 'test-session-123',
+    isAuthenticated: false,
+  }),
+}));
+
 describe('ActivityCard', () => {
   it('renders transport activity with distance and CO2e', () => {
-    renderWithI18n(<ActivityCard activity={baseActivity} />);
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
 
     expect(screen.getByText(/25/)).toBeInTheDocument();
     expect(screen.getByText(/km/)).toBeInTheDocument();
@@ -30,7 +51,7 @@ describe('ActivityCard', () => {
   });
 
   it('renders activity date', () => {
-    renderWithI18n(<ActivityCard activity={baseActivity} />);
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
 
     expect(screen.getByText(/Jan/)).toBeInTheDocument();
     expect(screen.getByText(/2024/)).toBeInTheDocument();
@@ -41,13 +62,13 @@ describe('ActivityCard', () => {
       ...baseActivity,
       notes: 'Commute to work',
     };
-    renderWithI18n(<ActivityCard activity={activityWithNotes} />);
+    renderWithProviders(<ActivityCard activity={activityWithNotes} />);
 
     expect(screen.getByText('Commute to work')).toBeInTheDocument();
   });
 
   it('does not render notes when absent', () => {
-    renderWithI18n(<ActivityCard activity={baseActivity} />);
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
 
     expect(screen.queryByText('Commute to work')).not.toBeInTheDocument();
   });
@@ -68,7 +89,7 @@ describe('ActivityCard', () => {
         is_domestic: true,
       },
     };
-    renderWithI18n(<ActivityCard activity={flightActivity} />);
+    renderWithProviders(<ActivityCard activity={flightActivity} />);
 
     expect(screen.getByText('JFK')).toBeInTheDocument();
     expect(screen.getByText('LAX')).toBeInTheDocument();
@@ -86,13 +107,13 @@ describe('ActivityCard', () => {
         destination_iata: 'LHR',
       },
     };
-    renderWithI18n(<ActivityCard activity={flightActivity} />);
+    renderWithProviders(<ActivityCard activity={flightActivity} />);
 
     expect(screen.getByText(/Flight/)).toBeInTheDocument();
   });
 
   it('does not render flight route info for non-flight types', () => {
-    renderWithI18n(<ActivityCard activity={baseActivity} />);
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
 
     expect(screen.queryByText('→')).not.toBeInTheDocument();
   });
@@ -103,7 +124,7 @@ describe('ActivityCard', () => {
       type: 'flight_domestic_short',
       metadata: undefined,
     };
-    renderWithI18n(<ActivityCard activity={flightNoMeta} />);
+    renderWithProviders(<ActivityCard activity={flightNoMeta} />);
 
     expect(screen.getByText(/Flight/)).toBeInTheDocument();
     expect(screen.queryByText('→')).not.toBeInTheDocument();
@@ -117,7 +138,7 @@ describe('ActivityCard', () => {
       value: 350,
       co2e_kg: 72.47,
     };
-    renderWithI18n(<ActivityCard activity={energyActivity} />);
+    renderWithProviders(<ActivityCard activity={energyActivity} />);
 
     expect(screen.getByText(/350/)).toBeInTheDocument();
     expect(screen.getByText(/kWh/)).toBeInTheDocument();
@@ -132,7 +153,7 @@ describe('ActivityCard', () => {
       value: 100,
       co2e_kg: 254.04,
     };
-    renderWithI18n(<ActivityCard activity={heatingOilActivity} />);
+    renderWithProviders(<ActivityCard activity={heatingOilActivity} />);
 
     expect(screen.getByText(/100/)).toBeInTheDocument();
     expect(screen.getByText(/liters/)).toBeInTheDocument();
@@ -147,7 +168,7 @@ describe('ActivityCard', () => {
       value: 2,
       co2e_kg: 54,
     };
-    renderWithI18n(<ActivityCard activity={foodActivity} />);
+    renderWithProviders(<ActivityCard activity={foodActivity} />);
 
     expect(screen.getByText(/2 servings/)).toBeInTheDocument();
     expect(screen.getByText(/54\.00 kg CO2e/)).toBeInTheDocument();
@@ -161,9 +182,73 @@ describe('ActivityCard', () => {
       value: 1,
       co2e_kg: 0.5,
     };
-    renderWithI18n(<ActivityCard activity={foodActivity} />);
+    renderWithProviders(<ActivityCard activity={foodActivity} />);
 
     expect(screen.getByText(/1 serving/)).toBeInTheDocument();
     expect(screen.getByText(/0\.50 kg CO2e/)).toBeInTheDocument();
+  });
+
+  it('renders edit button', () => {
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
+
+    const editButton = screen.getByTestId('edit-activity-button');
+    expect(editButton).toBeInTheDocument();
+    expect(editButton).toHaveAttribute('aria-label', 'Edit Activity');
+  });
+
+  it('renders delete button', () => {
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
+
+    const deleteButton = screen.getByTestId('delete-activity-button');
+    expect(deleteButton).toBeInTheDocument();
+    expect(deleteButton).toHaveAttribute('aria-label', 'Delete Activity');
+  });
+
+  it('opens edit modal when edit button is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
+
+    const editButton = screen.getByTestId('edit-activity-button');
+    await user.click(editButton);
+
+    expect(screen.getByText('Edit Activity')).toBeInTheDocument();
+    expect(screen.getByTestId('edit-type-select')).toBeInTheDocument();
+  });
+
+  it('opens delete dialog when delete button is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
+
+    const deleteButton = screen.getByTestId('delete-activity-button');
+    await user.click(deleteButton);
+
+    expect(screen.getByText('Delete Activity?')).toBeInTheDocument();
+    expect(screen.getByTestId('confirm-delete-button')).toBeInTheDocument();
+  });
+
+  it('closes edit modal when cancel is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
+
+    const editButton = screen.getByTestId('edit-activity-button');
+    await user.click(editButton);
+
+    const cancelButton = screen.getByText('Cancel');
+    await user.click(cancelButton);
+
+    expect(screen.queryByText('Edit Activity')).not.toBeInTheDocument();
+  });
+
+  it('closes delete dialog when cancel is clicked', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<ActivityCard activity={baseActivity} />);
+
+    const deleteButton = screen.getByTestId('delete-activity-button');
+    await user.click(deleteButton);
+
+    const cancelButton = screen.getByText('Cancel');
+    await user.click(cancelButton);
+
+    expect(screen.queryByText('Delete Activity?')).not.toBeInTheDocument();
   });
 });
