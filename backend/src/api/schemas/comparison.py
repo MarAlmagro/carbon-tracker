@@ -2,7 +2,7 @@
 
 from datetime import date
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class RegionInfo(BaseModel):
@@ -77,10 +77,8 @@ class ComparisonResponse(BaseModel):
     comparison: ComparisonMetrics
     breakdown: BreakdownComparison
 
-    class Config:
-        """Pydantic configuration."""
-
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "user_footprint": {
                     "period": "year",
@@ -118,3 +116,4 @@ class ComparisonResponse(BaseModel):
                 },
             }
         }
+    )
